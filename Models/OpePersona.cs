@@ -1,0 +1,121 @@
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
+namespace PLANTILLA_API_ODATA.Models
+{
+    public partial class OpePersona
+    {
+        public string CodigoEmpresa { get; set; }
+        public decimal IdPersona { get; set; }
+        public string Codigo { get; set; }
+        public string Ruc { get; set; }
+        public string ApellidoPaterno { get; set; }
+        public string ApellidoMaterno { get; set; }
+        public string Nombre { get; set; }
+        public string NombreComercial { get; set; }
+        public string Telefono { get; set; }
+        public string Fax { get; set; }
+        public string Direccion { get; set; }
+        public string Email { get; set; }
+        public string EmailFe { get; set; }
+        public string PaginaWeb { get; set; }
+        public string TipoPersona { get; set; }
+        public string Tipo { get; set; }
+        public string NombreContacto1 { get; set; }
+        public string DirrecionContacto1 { get; set; }
+        public string EmailContacto1 { get; set; }
+        public string CargoContacto1 { get; set; }
+        public string NombreContacto2 { get; set; }
+        public string DirrecionContacto2 { get; set; }
+        public string EmailContacto2 { get; set; }
+        public string CargoContacto2 { get; set; }
+        public string NombreContacto3 { get; set; }
+        public string DirrecionContacto3 { get; set; }
+        public string EmailContacto3 { get; set; }
+        public string CargoContacto3 { get; set; }
+        public string Estado { get; set; }
+        public string UsuarioCreacion { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public string UsuarioModificacion { get; set; }
+        public DateTime? FechaModificacion { get; set; }
+        public string CodigoSucursal { get; set; }
+        public string TipoDocumento { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
+        public string EstadoCivil { get; set; }
+        public string Sexo { get; set; }
+        public string CodigoSucursal2 { get; set; }
+        public DateTime? FechaIngreso { get; set; }
+        public DateTime? FechCese { get; set; }
+        public string CentroCosto { get; set; }
+        public string Area { get; set; }
+        public decimal? LineaCredito { get; set; }
+        public decimal? LineaCreditoD { get; set; }
+        public byte[] Imagen { get; set; }
+        public string Ruc2 { get; set; }
+        public string RazonSocial { get; set; }
+        public string Cuenta1 { get; set; }
+        public string Banco1 { get; set; }
+        public string TipoTrabajador { get; set; }
+        public string Ilimitado { get; set; }
+        public string TipoCliente { get; set; }
+        public string Vendedor { get; set; }
+        public string CondicionPago { get; set; }
+        public string Lote { get; set; }
+        public string EntregaDocumento { get; set; }
+        public string RutaImagen { get; set; }
+        public string Representante { get; set; }
+        public string NumeroContacto1 { get; set; }
+        public string NumeroContacto2 { get; set; }
+        public string NumeroContacto3 { get; set; }
+        public string ListaPrecio { get; set; }
+        public string AgenteRetencion { get; set; }
+        public string Pais { get; set; }
+        public string Departamento { get; set; }
+        public string Provincia { get; set; }
+        public string Distrito { get; set; }
+        public string TelefonoContacto1 { get; set; }
+        public string CelularContacto1 { get; set; }
+        public string RpcContacto1 { get; set; }
+        public string NextelContacto1 { get; set; }
+        public string TelefonoContacto2 { get; set; }
+        public string CelularContacto2 { get; set; }
+        public string RpcContacto2 { get; set; }
+        public string NextelContacto2 { get; set; }
+        public string TelefonoContacto3 { get; set; }
+        public string CelularContacto3 { get; set; }
+        public string RpcContacto3 { get; set; }
+        public string NextelContacto3 { get; set; }
+        public string CanalVenta { get; set; }
+        public string SubcanalVenta { get; set; }
+        public string Region { get; set; }
+        public string SectorEconomico { get; set; }
+        public string SubsectorEconomico { get; set; }
+        public string BuenContribuyente { get; set; }
+        public string AfectoSpot { get; set; }
+        public string ProveedorAgualuz { get; set; }
+        public string AgentePercepcion { get; set; }
+        public decimal? PorPercepcion { get; set; }
+        public string ZonaVenta { get; set; }
+        public string RutaVenta { get; set; }
+        public string OrigenClie { get; set; }
+        public string EstadoHnh { get; set; }
+        public decimal? TasaInteres { get; set; }
+        public string NivelRiesgo { get; set; }
+        public string FormaAtencion { get; set; }
+        public string Observacion { get; set; }
+        public decimal? Descuento { get; set; }
+        public string EditaPrecio { get; set; }
+        public string Referencia { get; set; }
+        public string CategoriaTrab { get; set; }
+        public string RucRef { get; set; }
+        public decimal? IdReferencia { get; set; }
+        public string Telefono2 { get; set; }
+        public string TipoPaciente { get; set; }
+        public string Especialidad { get; set; }
+        public string Ocupacion { get; set; }
+        public string Seguro { get; set; }
+        public decimal? IdProspecto { get; set; }
+    }
+}
