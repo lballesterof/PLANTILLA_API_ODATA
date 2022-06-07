@@ -1,10 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Cotizaciones\**" />
+    <Compile Remove="Services\Pedidos\**" />
+    <Content Remove="Services\Cotizaciones\**" />
+    <Content Remove="Services\Pedidos\**" />
+    <EmbeddedResource Remove="Services\Cotizaciones\**" />
+    <EmbeddedResource Remove="Services\Pedidos\**" />
+    <None Remove="Services\Cotizaciones\**" />
+    <None Remove="Services\Pedidos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.16">
@@ -17,14 +31,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.2.0" />
+    <PackageReference Include="Spring.Core" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DbContexts\" />
     <Folder Include="Commons\" />
-    <Folder Include="Services\Cotizaciones\" />
-    <Folder Include="Services\Pedidos\" />
+    <Folder Include="Services\Helpers\" />
   </ItemGroup>
 
 </Project>
