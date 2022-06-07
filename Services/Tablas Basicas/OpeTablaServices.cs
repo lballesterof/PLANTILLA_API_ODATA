@@ -1,5 +1,8 @@
-﻿using PLANTILLA_API_ODATA.DbContexts;
+﻿using AutoMapper;
+using PLANTILLA_API_ODATA.DbContexts;
 using PLANTILLA_API_ODATA.Models;
+using PLANTILLA_API_ODATA.Models.DTO.DetalleTabla;
+using PLANTILLA_API_ODATA.Models.DTO.Users;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,25 +10,42 @@ namespace PLANTILLA_API_ODATA.Services
 {
     public class OpeTablaServices : IOpeTablaServices
     {
-        private readonly DataContext _context;
 
-        public OpeTablaServices()
+        private DataContext db;
+
+        private readonly IMapper _mapper;
+
+        public OpeTablaServices(DataContext context, IMapper mapper)
         {
-            _context = new DataContext();
+            db = context;
+            _mapper = mapper;
         }
-
-
         public IQueryable<OpeTabla> RetrieveAllTablas()
         {
            //_context = new DataContext();
-            List<OpeTabla> _List = _context.OpeTablas.ToList();
+
+            var ilist=  db.OpeTablas.ToList();
+            foreach (var item in ilist)
+            {
+                db.Entry(item).Collection(p => p.detalletabla).Load();
+                foreach (var collect in item.detalletabla)
+                {
+                    collect.Codigo.Where(p => p.Equals(item.Codigo));
+                    
+                }
+
+            }
+
+
+
+            List<OpeTabla> _List = ilist;
             IQueryable<OpeTabla> retrievedTablas= _List.AsQueryable();
             return retrievedTablas;
         }
         public IQueryable<OpeDetalleTabla> RetrieveAllDetailTablas()
         {
             //_context = new DataContext();
-            List<OpeDetalleTabla> _List = _context.OpeDetalleTablas.ToList();
+            List<OpeDetalleTabla> _List = db.OpeDetalleTablas.ToList();
             IQueryable<OpeDetalleTabla> retrievedTablas = _List.AsQueryable();
             return retrievedTablas;
         }

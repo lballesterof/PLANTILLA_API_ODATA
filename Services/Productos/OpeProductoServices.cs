@@ -5,15 +5,15 @@ using System.Linq;
 
 namespace PLANTILLA_API_ODATA.Services.Productos
 {
-    public class OpeProductoServices : IOpePersonaServices
+    public class OpeProductoServices : IOpeProductoServices
     {
 
 
         private readonly DataContext _context;
 
-        public OpeProductoServices()
+        public OpeProductoServices(DataContext context)
         {
-            _context = new DataContext();
+            _context = context;
         }
 
 
@@ -25,5 +25,7 @@ namespace PLANTILLA_API_ODATA.Services.Productos
             return retrievedProductos;
         }
 
+
     }
+
 }

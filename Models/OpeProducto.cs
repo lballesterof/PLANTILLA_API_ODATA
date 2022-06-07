@@ -114,13 +114,13 @@ namespace PLANTILLA_API_ODATA.Models
         public string Referencia6 { get; set; }
         public string Referencia7 { get; set; }
         public decimal? IdEquiProd { get; set; }
-        public string PesoEmpaVenta { get; set; }
-        public string XcmEmpaVenta { get; set; }
-        public string YcmEmpaVenta { get; set; }
-        public string ZcmEmpaVenta { get; set; }
+        public decimal? PesoEmpaVenta { get; set; }
+        public decimal? XcmEmpaVenta { get; set; }
+        public decimal? YcmEmpaVenta { get; set; }
+        public decimal? ZcmEmpaVenta { get; set; }
         public string CuentaVenta { get; set; }
         public string CuentaCompra { get; set; }
-        public int? Orden { get; set; }
+        public decimal? Orden { get; set; }
         public decimal? AplicaImporteDetraccion { get; set; }
         public string NumLab { get; set; }
         public string NumPre { get; set; }
