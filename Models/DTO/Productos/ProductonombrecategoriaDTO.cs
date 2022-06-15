@@ -9,5 +9,6 @@
         public double? PRECIO_VENTA { get; set; }
         public int? RECETA { get; set; }
         public string ADICIONAL { get; set; }
+        public string COMANDA { get; set; }
     }
 }
