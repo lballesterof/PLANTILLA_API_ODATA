@@ -4,9 +4,15 @@ using PLANTILLA_API_ODATA.Models;
 using PLANTILLA_API_ODATA.Models.DTO.Pedido;
 using PLANTILLA_API_ODATA.Services.Pedido;
 using System.Threading.Tasks;
-using PLANTILLA_API_ODATA.Services.Precuenta;
 using Microsoft.AspNetCore.Hosting;
 using PLANTILLA_API_ODATA.Reports.Precuenta;
+using Microsoft.AspNetCore.OData.Query;
+using System.Linq;
+using Dapper;
+using System.Collections.Generic;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using PLANTILLA_API_ODATA.Services.Helpers.Common;
 
 namespace PLANTILLA_API_ODATA.Controllers
 {
@@ -24,19 +30,48 @@ namespace PLANTILLA_API_ODATA.Controllers
 			this._oHostEnvironment = oHostEnvironment;
 		}
 		#endregion
-
-
-		#region Impresion Precuenta
-		[HttpGet("Precuenta/{NroPrecuenta}")]
-		[Produces("application/pdf", new string[] { })]
-		public async Task<IActionResult> ImprimirPrecuenta(string NroPrecuenta)
+		#region GetAll
+		[HttpGet]
+		[EnableQuery]
+		public ActionResult<IQueryable<OpePedido>> GetAllStudents()
 		{
-			PedidoController controller = this;
-			TicketPrecuentaPDF.TicketPDF PC = new TicketPrecuentaPDF.TicketPDF();
-			return File(new CrearPrecuenta().CrearBoleta(), "application/pdf");
+			IQueryable<OpePedido> retrievedProducts =
+				this._services.RetrieveAllPedidos();
+
+			return Ok(retrievedProducts);
 		}
 		#endregion
+		#region Impresion Precuenta
+		[HttpGet("Precuenta")]
+	
+		public IActionResult ImprimirPrecuenta(string idPedido)
+		{
+			
+			return Ok(_services.PrecuentafinbyId(idPedido));
+		}
+		#endregion
+		#region Pedido Detalle Cuenta
+		[HttpGet("PedidoMesa/{id}")]
+		public async Task<IActionResult> GetPedidoMesa(string id)
+		{
+			IEnumerable<OpeDetallePedidoDTO> listado = null;
+			using (IDbConnection db = new SqlConnection(Global.ConnectionStrings))
+			{
+				if (db.State == ConnectionState.Closed) db.Open();
+				{
+					DynamicParameters cmd = new DynamicParameters();
+					cmd.Add("@ID_PEDIDO", id);
+					var procedure = "GetDataPedidoDetalleID";
 
+					listado = db.Query<OpeDetallePedidoDTO>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
+
+				}
+			}
+
+			return new JsonResult(listado);
+		}
+
+		#endregion
 		#region Creación de Pedido
 		[HttpPost("CreateOrder")]
 		public IActionResult InsertPedido([FromBody] CabeceraPedidoDTO entity)

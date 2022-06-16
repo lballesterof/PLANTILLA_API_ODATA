@@ -11,9 +11,9 @@ namespace PLANTILLA_API_ODATA.Services.Persona
 
         private readonly DataContext _context;
 
-        public OpePersonaServices()
+        public OpePersonaServices(DataContext context)
         {
-            _context = new DataContext();
+            _context = context;
         }
 
 

@@ -22,23 +22,10 @@ namespace PLANTILLA_API_ODATA.Services
         }
         public IQueryable<OpeTabla> RetrieveAllTablas()
         {
-           //_context = new DataContext();
-
-            var ilist=  db.OpeTablas.ToList();
-            foreach (var item in ilist)
-            {
-                db.Entry(item).Collection(p => p.detalletabla).Load();
-                foreach (var collect in item.detalletabla)
-                {
-                    collect.Codigo.Where(p => p.Equals(item.Codigo));
-                    
-                }
-
-            }
 
 
 
-            List<OpeTabla> _List = ilist;
+            List<OpeTabla> _List = db.OpeTablas.ToList();
             IQueryable<OpeTabla> retrievedTablas= _List.AsQueryable();
             return retrievedTablas;
         }

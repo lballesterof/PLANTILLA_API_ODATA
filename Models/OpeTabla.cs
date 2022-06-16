@@ -13,6 +13,6 @@ namespace PLANTILLA_API_ODATA.Models
         public string Nombre { get; set; }
         public string Estado { get; set; }
         
-        public virtual ICollection<OpeDetalleTabla> detalletabla { get; set; } = new Collection<OpeDetalleTabla>();
+        public virtual ICollection<OpeDetalleTabla> detalletabla { get; set; }
     }
 }

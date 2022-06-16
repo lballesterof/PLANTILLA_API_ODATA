@@ -8,7 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
@@ -29,6 +33,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using IOpeMesaService = PLANTILLA_API_ODATA.Services.Mesas.IOpeMesaService;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace PLANTILLA_API_ODATA
 {
@@ -41,7 +47,15 @@ namespace PLANTILLA_API_ODATA
 
         public IConfiguration Configuration { get; }
 
-       
+        private bool CustomLifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken tokenToValidate, TokenValidationParameters @param)
+        {
+            if (expires != null)
+            {
+                return expires > DateTime.UtcNow;
+            }
+            return false;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             // services.AddMvc().AddJsonOptions(options =>
@@ -50,7 +64,7 @@ namespace PLANTILLA_API_ODATA
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DataContext")).EnableSensitiveDataLogging()
             .EnableDetailedErrors());
             services.AddControllers().AddOData(options =>
-            options.Select().Filter().OrderBy().Expand());
+            options.Select().Filter().OrderBy().Expand().SetMaxTop(5000));
             services.AddTransient<IOpeTablaServices, OpeTablaServices>();
             services.AddTransient<IOpePersonaServices, OpePersonaServices>();
             services.AddTransient<IOpeMesaService, OpeMesaService>();
@@ -58,6 +72,7 @@ namespace PLANTILLA_API_ODATA
             services.AddTransient<IOpePedidoService, OpePedidoService>();
             services.AddTransient<IOpeUsuarioService, OpeUsuarioService>();
             Global.ConnectionStrings = Configuration.GetConnectionString("DataContext");
+            Global.Secret = Configuration.GetSection("AppSettings").ToString();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Services Layers Unosoft", Version = "v1" });
@@ -72,7 +87,28 @@ namespace PLANTILLA_API_ODATA
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
             services.AddMvc();
-
+            IdentityModelEventSource.ShowPII = true;
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+        .AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            string secret = Global.Secret;
+            var securityKey = new SymmetricSecurityKey(Encoding.Default.GetBytes(secret));
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateLifetime = true,
+                LifetimeValidator = CustomLifetimeValidator,
+                RequireExpirationTime = true,
+                IssuerSigningKey = securityKey,
+                ValidateIssuerSigningKey = true,
+            };
+        });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +125,7 @@ namespace PLANTILLA_API_ODATA
             }
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebSUSPedido v1"));
-
+            IdentityModelEventSource.ShowPII = true;
 
             app.UseRouting();
 

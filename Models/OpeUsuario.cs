@@ -61,5 +61,6 @@ namespace PLANTILLA_API_ODATA.Models
         public string Referencia38 { get; set; }
         public string Referencia39 { get; set; }
         public string Referencia40 { get; set; }
+  
     }
 }

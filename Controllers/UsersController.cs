@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using PLANTILLA_API_ODATA.Models;
@@ -15,7 +16,13 @@ namespace PLANTILLA_API_ODATA.Controllers
         private readonly IOpeUsuarioService opeUsuarioService;
         public UsersController(IOpeUsuarioService opeUsuarioService) =>
         this.opeUsuarioService = opeUsuarioService;
-
+        private string ipAddress()
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+                return Request.Headers["X-Forwarded-For"];
+            else
+                return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+        }
 
         [HttpGet]
         [EnableQuery]
@@ -26,5 +33,25 @@ namespace PLANTILLA_API_ODATA.Controllers
 
             return Ok(retrieveAllUsers);
         }
+
+        [HttpPost("Login")]
+        public IActionResult Authenticate([FromBody] AuthenticateRequest model)
+        {
+            AuthenticateResponse response = opeUsuarioService.Authenticate(model, ipAddress());
+
+            if (response==null)
+            {
+                return BadRequest(new { message = "Usuario o Contraseña Incorrecta" });
+            }
+            else
+            {
+                return Ok(response);
+
+            }
+
+            //setTokenCookie(response.RefreshToken);
+
+        }
+
     }
 }
