@@ -16,9 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ardalis.Specification" Version="5.2.0" />
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="5.2.0" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.16" />
@@ -40,8 +45,10 @@
   <ItemGroup>
     <Folder Include="DbContexts\" />
     <Folder Include="Commons\" />
-    <Folder Include="Services\Helpers\" />
+    <Folder Include="Models\NewFolder\" />
     <Folder Include="Services\Precuenta\" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

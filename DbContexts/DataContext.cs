@@ -578,15 +578,15 @@ namespace PLANTILLA_API_ODATA.DbContexts
         public virtual DbSet<VwFaelResumen3V02> VwFaelResumen3V02s { get; set; }
         public virtual DbSet<VwFaelResumenV02> VwFaelResumenV02s { get; set; }
         public virtual DbSet<VwNetoPagar> VwNetoPagars { get; set; }
-
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseSqlServer("Server=localhost;Database=dbUSArteusSAC;User Id=sa;Password=Qz0966lb;");
-//            }
-//        }
+        public virtual DbSet<VwGetstockAllwarehousePricelist> VwGetstockAllwarehousePricelists { get; set; }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=localhost;Database=dbUSArteusSAC;User Id=sa;Password=Qz0966lb;");
+        //            }
+        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58115,6 +58115,9 @@ namespace PLANTILLA_API_ODATA.DbContexts
                     .HasColumnName("VERSION_UBL");
             });
 
+
+
+
             modelBuilder.Entity<VwNetoPagar>(entity =>
             {
                 entity.HasNoKey();
@@ -58140,6 +58143,64 @@ namespace PLANTILLA_API_ODATA.DbContexts
                     .HasColumnName("IMPORTE");
 
                 entity.Property(e => e.Mes).HasColumnName("MES");
+            });
+
+
+            modelBuilder.Entity<VwGetstockAllwarehousePricelist>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("VW_GETSTOCK_ALLWAREHOUSE_PRICELIST");
+
+                entity.Property(e => e.Almacen)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("ALMACEN");
+
+                entity.Property(e => e.CdgRef)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("CDG_REF");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("CODIGO");
+
+                entity.Property(e => e.CodigoBarra)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("CODIGO_BARRA");
+
+                entity.Property(e => e.ListaPrecio)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("LISTA_PRECIO");
+
+                entity.Property(e => e.Mon)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false)
+                    .HasColumnName("MON");
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("NOMBRE");
+
+                entity.Property(e => e.PrecioVenta)
+                    .HasColumnType("numeric(14, 4)")
+                    .HasColumnName("PRECIO_VENTA");
+
+                entity.Property(e => e.StockActual)
+                    .HasColumnType("numeric(38, 2)")
+                    .HasColumnName("STOCK_ACTUAL");
+
+                entity.Property(e => e.Unidad)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false)
+                    .HasColumnName("UNIDAD");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -110,6 +110,7 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
 
 
                         sqlTransaction.Commit();
+                        pedido.ID_PEDIDO = num;
                     }
                     catch (Exception)
                     {
