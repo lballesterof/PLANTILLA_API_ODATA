@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Data.SqlClient;
 using PLANTILLA_API_ODATA.Models;
+using PLANTILLA_API_ODATA.Services.Helpers.Common;
 using PLANTILLA_API_ODATA.Services.Mesas;
+using System;
+using System.Data;
 using System.Linq;
 
 namespace PLANTILLA_API_ODATA.Controllers
@@ -27,7 +32,39 @@ namespace PLANTILLA_API_ODATA.Controllers
             return Ok(retrievedProducts);
         }
 
+        [HttpPut("EstadoMesa/{Piso}/{Mesa}/{Estado}")]
+        public IActionResult UpdateEstado(string Piso, int Mesa, string Estado)
+        {
 
+                using (IDbConnection cnn = (IDbConnection)new SqlConnection(Global.ConnectionStrings))
+                {
+                    cnn.Open();
+                    using (SqlTransaction sqlTransaction = (SqlTransaction)cnn.BeginTransaction())
+                    {
+                        try
+                        {
+                            DynamicParameters dynamicParameters1 = new DynamicParameters();
+                            dynamicParameters1.Add("@PISO", (object)Piso);
+                            dynamicParameters1.Add("@MESA", (object)Mesa);
+                            dynamicParameters1.Add("@ESTADO", (object)Estado);
 
+                           var RESPONSE = cnn.ExecuteScalar("RESTA_MOBILE_UPDATE_ESTADOMESA", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
+
+                            sqlTransaction.Commit();
+                            return Ok();
+                        }
+                        catch (Exception ex)
+                        {
+                            sqlTransaction.Rollback();
+                            return BadRequest(ex.Message);
+                            throw;
+                        }
+                    }
+                    cnn.Dispose();
+
+                }
+            }
+          
+        }
     }
-}
+

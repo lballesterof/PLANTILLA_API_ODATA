@@ -12,9 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.OData.Edm;
-using Microsoft.OData.ModelBuilder;
+
+using MediatR;
+
 using Microsoft.OpenApi.Models;
 using PLANTILLA_API_ODATA.DbContexts;
 using PLANTILLA_API_ODATA.Models;
@@ -35,6 +35,9 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using IOpeMesaService = PLANTILLA_API_ODATA.Services.Mesas.IOpeMesaService;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
+using PLANTILLA_API_ODATA.Interfaces;
+using PLANTILLA_API_ODATA.Repository;
 
 namespace PLANTILLA_API_ODATA
 {
@@ -65,12 +68,16 @@ namespace PLANTILLA_API_ODATA
             .EnableDetailedErrors());
             services.AddControllers().AddOData(options =>
             options.Select().Filter().OrderBy().Expand().SetMaxTop(5000));
+            services.AddTransient(typeof(IRepositoryAsync<>), typeof(USRepository<>));
             services.AddTransient<IOpeTablaServices, OpeTablaServices>();
             services.AddTransient<IOpePersonaServices, OpePersonaServices>();
             services.AddTransient<IOpeMesaService, OpeMesaService>();
             services.AddTransient<IOpeProductoServices, OpeProductoServices>();
             services.AddTransient<IOpePedidoService, OpePedidoService>();
             services.AddTransient<IOpeUsuarioService, OpeUsuarioService>();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
+
             Global.ConnectionStrings = Configuration.GetConnectionString("DataContext");
             Global.Secret = Configuration.GetSection("AppSettings").ToString();
             services.AddSwaggerGen(c =>
