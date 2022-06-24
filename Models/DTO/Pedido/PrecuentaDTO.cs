@@ -10,7 +10,9 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Pedido
         public string MESERO { get; set; }
         public string OBSERVACIONES { get; set; }
         public string FECHAYHORA { get; set; }
-
+        public string TOTAL { get; set; }
+        public string IGV { get; set; }
+        public string SUBTOTAL { get; set; }
         public virtual IList<DetalleprecuentaDTO> detalle { get; set; }
     }
 

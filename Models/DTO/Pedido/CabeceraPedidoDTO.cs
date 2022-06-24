@@ -53,6 +53,8 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Pedido
         public string CENTRO_COSTO { get; set; }
         public decimal TIPO_CAMBIO { get; set; }
         public string SUCURSAL { get; set; }
+        public string MESA { get; set; }
+        public string PISO { get; set; }
         public List<DetallePedidoDTO> Detalle { get; set; }
     }
 }
