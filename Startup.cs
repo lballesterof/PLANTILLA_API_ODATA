@@ -38,6 +38,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using PLANTILLA_API_ODATA.Interfaces;
 using PLANTILLA_API_ODATA.Repository;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace PLANTILLA_API_ODATA
 {
@@ -76,7 +77,7 @@ namespace PLANTILLA_API_ODATA
             services.AddTransient<IOpePedidoService, OpePedidoService>();
             services.AddTransient<IOpeUsuarioService, OpeUsuarioService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
-
+            services.AddSwaggerGen(options => options.DocumentFilter<RemoveSchemasFilter>());
 
             Global.ConnectionStrings = Configuration.GetConnectionString("DataContext");
             Global.Secret = Configuration.GetSection("AppSettings").ToString();
@@ -118,6 +119,19 @@ namespace PLANTILLA_API_ODATA
         });
         }
 
+
+        public class RemoveSchemasFilter : IDocumentFilter
+        {
+            public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+            {
+
+                IDictionary<string, OpenApiSchema> _remove = swaggerDoc.Components.Schemas;
+                foreach (KeyValuePair<string, OpenApiSchema> _item in _remove)
+                {
+                    swaggerDoc.Components.Schemas.Remove(_item.Key);
+                }
+            }
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -131,7 +145,13 @@ namespace PLANTILLA_API_ODATA
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebSUSPedido v1"));
             }
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebSUSPedido v1"));
+            app.UseSwaggerUI(c =>
+
+
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebSUSPedido v1")
+            
+            ) ;
+            ;
             IdentityModelEventSource.ShowPII = true;
 
             app.UseRouting();

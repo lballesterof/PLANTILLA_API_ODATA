@@ -12,6 +12,6 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
         OpePedido PedidoWithDetail(string idPedido);
         CabeceraPedidoDTO SavePedido(CabeceraPedidoDTO pedido);
         public PrecuentaDTO PrecuentafinbyId(string idPedido);
-        public ComandaDTO ComandarfinbyIdAndComanda(string idPedido, string Comanda);
+        public List<ComandaDTO> ComandarfinbyIdAndComanda(string idPedido);
     }
 }

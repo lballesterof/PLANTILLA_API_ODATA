@@ -82,6 +82,16 @@ namespace PLANTILLA_API_ODATA.Controllers
 		#endregion
 
 
+		#region Comandar
+		[HttpGet("Comanda")]
+		public IActionResult ImprimirComanda(string idPedido)
+		{
+
+			return Ok(_services.ComandarfinbyIdAndComanda(idPedido));
+		}
+		#endregion
+
+
 
 	}
 

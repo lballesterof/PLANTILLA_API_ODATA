@@ -73,7 +73,9 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                         dynamicParameters1.Add("@TIPO_CAMBIO", (object)pedido.TIPO_CAMBIO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@SUCURSAL", (object)pedido.SUCURSAL, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@SERIE", (object)pedido.SERIE, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                        int num = db.ExecuteScalar<int>("InsertPedidoVenta", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
+                        dynamicParameters1.Add("@MESA", (object)pedido.MESA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
+                        dynamicParameters1.Add("@PISO", (object)pedido.PISO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
+                        int num = db.ExecuteScalar<int>("InsertPedidoVenta_Comanda", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
                         foreach (DetallePedidoDTO devolucionDetalle in pedido.Detalle)
                         {
                             DynamicParameters dynamicParameters2 = new DynamicParameters();
@@ -154,6 +156,9 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                     DTOMaster.NUMERO_PEDIDO = item.NUMERO_PEDIDO;
                     DTOMaster.OBSERVACIONES = item.OBSERVACIONES;
                     DTOMaster.MESERO = item.MESERO;
+                    DTOMaster.IGV = item.IGV;
+                    DTOMaster.TOTAL = item.TOTAL;
+                    DTOMaster.SUBTOTAL = item.SUBTOTAL;
                     DTOMaster.MESA = item.MESA;
                     DTOMaster.FECHAYHORA = item.FECHAYHORA;
                     DTOMaster.ZONA = item.ZONA;
@@ -171,9 +176,45 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
 
         }
 
-        public ComandaDTO ComandarfinbyIdAndComanda(string idPedido, string Comanda)
+        public List<ComandaDTO> ComandarfinbyIdAndComanda(string idPedido)
         {
-            throw new NotImplementedException();
+            ComandaDTO _DTOBase = new ComandaDTO();
+            List<ComandaDTO> _DTORETURN = new List<ComandaDTO>();
+            List<NumeroComandaDTO> _ListadoComandas = new List<NumeroComandaDTO>();
+            PrecuentaDTO DTOMaster = new PrecuentaDTO();
+
+            using (IDbConnection db = new SqlConnection(Global.ConnectionStrings))
+            {
+
+                if (db.State == ConnectionState.Closed)
+                    db.Open();
+                DynamicParameters cmd = new DynamicParameters();
+                cmd.Add("@ID_PEDIDO", idPedido);
+
+                var procedure = "OPESS_OBTENER_COMANDAR_API_CABECERA";
+                var proceduredetalle = "OPESS_OBTENER_COMANDAR_API_DETALLE";
+                var procedurecomanda = "APP_RESTA_LISTAR_COMANDA";
+                _ListadoComandas = db.Query<NumeroComandaDTO>(procedurecomanda, cmd, commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+                foreach (var item in _ListadoComandas)
+                {
+                    DynamicParameters cmd2 = new DynamicParameters();
+                    cmd2.Add("@ID_DOCUMENTO", idPedido);
+                    cmd2.Add("@COMANDA", item.COMANDA);
+                    _DTOBase = db.QueryFirstOrDefaultAsync<ComandaDTO>(procedure, cmd2, commandType: CommandType.StoredProcedure).Result;
+
+                    _DTOBase.Detalle = db.Query<DetalleComandarDTO>(proceduredetalle, cmd2, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                    _DTORETURN.Add(_DTOBase);
+                }
+
+    
+
+                db.Dispose();
+            }
+
+            return _DTORETURN;
+
+
         }
 
         public OpePedido PedidoWithDetail(string idPedido)
