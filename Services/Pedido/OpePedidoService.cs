@@ -106,6 +106,7 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                             dynamicParameters2.Add("@SWT_FREE", (object)devolucionDetalle.SWT_FREE, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             dynamicParameters2.Add("@POR_DETRACCION", (object)devolucionDetalle.POR_DETRACCION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             dynamicParameters2.Add("@DETRACCION", (object)devolucionDetalle.DETRACCION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
+                            dynamicParameters2.Add("@COMANDA", (object)devolucionDetalle.COMANDA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             db.ExecuteScalar("InsertDetallePedido", (object)dynamicParameters2, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
                         }
 
@@ -243,6 +244,11 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
 
             return DTOMaster;
 
+        }
+
+        public CabeceraPedidoDTO UpdatePedido(CabeceraPedidoDTO pedido)
+        {
+            throw new NotImplementedException();
         }
     }
 

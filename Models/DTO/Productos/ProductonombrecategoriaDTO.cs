@@ -10,5 +10,7 @@
         public int? RECETA { get; set; }
         public string ADICIONAL { get; set; }
         public string COMANDA { get; set; }
+        public double? IGV { get; set; }
+        public double? PSIGV { get; set; }
     }
 }
