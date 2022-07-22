@@ -22,9 +22,6 @@ namespace PLANTILLA_API_ODATA.Services
         }
         public IQueryable<OpeTabla> RetrieveAllTablas()
         {
-
-
-
             List<OpeTabla> _List = db.OpeTablas.ToList();
             IQueryable<OpeTabla> retrievedTablas= _List.AsQueryable();
             return retrievedTablas;

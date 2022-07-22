@@ -20,6 +20,7 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Users
         public string VALIDEZ {get;set;}
         public string CDGPAGO {get;set;}
         public string SUCURSAL {get;set;}
+        public string NOMBREMOZO { get;set;}
         public string USUARIOAUTORIZA {get;set;}
         public string USUARIOCREACION {get;set;}
         public string DESCUENTO {get;set;}
@@ -35,7 +36,7 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Users
         public string? CORRELATIVO => null;
         public string? CENTRO_COSTO = null;
         public string RefreshToken {get;set;}
-
+        public string? CDG_VENDEDOR { get; set; }
         public AuthenticateResponse(OpeUsuarioDTO user, string jwtToken, string refreshToken)
         {
             USUARIO = user.USUARIO;
@@ -53,8 +54,10 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Users
             SERIEPEDIDO = user.SERIEPEDIDO;
             ESTADOPEDIDO = user.ESTADOPEDIDO;
             TIPOCAMBIO = user.TIPOCAMBIO;
+            NOMBREMOZO = user.NOMBREMOZO;
             JwtToken = jwtToken;
             RefreshToken = refreshToken;
+            CDG_VENDEDOR = user.CDG_VENDEDOR;
 
         }
     }

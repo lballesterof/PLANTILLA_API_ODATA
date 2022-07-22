@@ -13,5 +13,7 @@ namespace PLANTILLA_API_ODATA.Models
         public string EstadoTrans { get; set; }
         public string Tipo { get; set; }
         public decimal? Secuencia { get; set; }
+        public decimal? IdPedido { get; set; }
+        public string NombreMozo { get; set; }
     }
 }

@@ -45,6 +45,7 @@ namespace PLANTILLA_API_ODATA.Controllers
         {
             using (IDbConnection cnn = (IDbConnection)new SqlConnection(Global.ConnectionStrings))
             {
+                int num = 0;
                 cnn.Open();
                 using (SqlTransaction sqlTransaction = (SqlTransaction)cnn.BeginTransaction())
                 {
@@ -64,10 +65,9 @@ namespace PLANTILLA_API_ODATA.Controllers
                         dynamicParameters1.Add("@IMPORTE_TOTAL", (object)objDev.IMPORTE_TOTAL);
                         dynamicParameters1.Add("@PORCENTAJE_DESCUENTO", (object)objDev.PORCENTAJE_DESCUENTO);
                         dynamicParameters1.Add("@PORCENTAJE_IGV", (object)objDev.PORCENTAJE_IGV);
-                        dynamicParameters1.Add("@OBSERVACION", (object)objDev.OBSERVACION);
                         dynamicParameters1.Add("@ID_CLIENTE", (object)objDev.ID_CLIENTE);
                         dynamicParameters1.Add("@ID_CLIENTE_FACTURA", (object)objDev.ID_CLIENTE_FACTURA);
-                        dynamicParameters1.Add("@IMPORTE_ISC", (object)objDev.IMPORTE_ISC);
+                        dynamicParameters1.Add("@IMPORTE_ISC", (object)0);
                         dynamicParameters1.Add("@CONTACTO", (object)' ');
                         dynamicParameters1.Add("@EMAIL_CONTACTO", (object)' ');
                         dynamicParameters1.Add("@CODIGO_EMPRESA", (object)objDev.CODIGO_EMPRESA);
@@ -89,15 +89,30 @@ namespace PLANTILLA_API_ODATA.Controllers
                         dynamicParameters1.Add("@ID_COTIZACION_PARENT", (object)objDev.ID_COTIZACION_PARENT);
                         dynamicParameters1.Add("@VERSION", (object)'0');
                         dynamicParameters1.Add("@TIPO_OPERACION", (object)0);
-                        dynamicParameters1.Add("@REF1");
-                        dynamicParameters1.Add("@OBSERVACION");
-                        dynamicParameters1.Add("@SUCURSAL");
-                        dynamicParameters1.Add("@TIPO_COTI");
-                        dynamicParameters1.Add("@DIAS_ENTREGA2", (object)0);
-                        dynamicParameters1.Add("@TIPO_CLIENTE", (object)objDev.TIPO_CLIENTE);
-                        dynamicParameters1.Add("@OBSERVACION2");
+                        dynamicParameters1.Add("@REF1", (object)' ');
+                        dynamicParameters1.Add("@OBSERVACION", (object) objDev.OBSERVACION);
+                        dynamicParameters1.Add("@SUCURSAL", (object) ' ');
+                        dynamicParameters1.Add("@TIPO_COTI", (object) ' ');
+                        dynamicParameters1.Add("@TIPO_ENTREGA", (object)'1');
+                        dynamicParameters1.Add("@DIAS_ENTREGA2", (object)2);
+                        dynamicParameters1.Add("@OBSERVACION2", (object) objDev.OBSERVACION2);
                         dynamicParameters1.Add("@FECHA_COTIZACION", (object)objDev.FECHA_COTIZACION);
-                        int num = cnn.ExecuteScalar<int>("InsertCotizacionVenta", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
+                        num = cnn.ExecuteScalar<int>("InsertCotizacionVenta", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
+
+                        var parameters = new { IdCotizacion = num };
+                        IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
+                        var sql = "SELECT ID_COTIZACION FROM OPE_DETALLE_COTIZACION WHERE ID_COTIZACION = @IdCotizacion ;";
+                        var result = dbII.Query(sql, parameters);
+
+                        if (result.Count() >= 1)
+                        {
+                            var parametersI = new { IdPedido = num };
+                            var sqlI = "DELETE FROM OPE_DETALLE_COTIZACION WHERE ID_COTIZACION = @IdCotizacion ;";
+                            var resultI = dbII.Query(sqlI, parametersI);
+                        }
+
+
+
                         foreach (DCotizacion dcotizacion in objDev.DetCotizacion)
                         {
                             DynamicParameters dynamicParameters2 = new DynamicParameters();
@@ -122,6 +137,7 @@ namespace PLANTILLA_API_ODATA.Controllers
                             cnn.ExecuteScalar("InsertDetalleCotizacionVenta", (object)dynamicParameters2, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
                         }
                         sqlTransaction.Commit();
+                        objDev.ID_COTIZACION = decimal.Parse(num.ToString());
                     }
                     catch (Exception ex)
                     {
@@ -129,7 +145,7 @@ namespace PLANTILLA_API_ODATA.Controllers
                         return (IActionResult)this.NotFound(ex.Message) ;
                     }
                 }
-                return (IActionResult)this.Ok();
+                return (IActionResult)this.Ok((object)objDev);
             }
         }
 

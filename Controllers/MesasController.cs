@@ -32,8 +32,8 @@ namespace PLANTILLA_API_ODATA.Controllers
             return Ok(retrievedProducts);
         }
 
-        [HttpPut("EstadoMesa/{Piso}/{Mesa}/{Estado}")]
-        public IActionResult UpdateEstado(string Piso, int Mesa, string Estado)
+        [HttpPut("EstadoMesa/{Piso}/{Mesa}/{Estado}/{Mozo}")]
+        public IActionResult UpdateEstado(string Piso, int Mesa, string Estado, string Mozo)
         {
 
                 using (IDbConnection cnn = (IDbConnection)new SqlConnection(Global.ConnectionStrings))
@@ -47,8 +47,8 @@ namespace PLANTILLA_API_ODATA.Controllers
                             dynamicParameters1.Add("@PISO", (object)Piso);
                             dynamicParameters1.Add("@MESA", (object)Mesa);
                             dynamicParameters1.Add("@ESTADO", (object)Estado);
-
-                           var RESPONSE = cnn.ExecuteScalar("RESTA_MOBILE_UPDATE_ESTADOMESA", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
+                            dynamicParameters1.Add("@MOZO", (object)Mozo);
+                        var RESPONSE = cnn.ExecuteScalar("RESTA_MOBILE_UPDATE_ESTADOMESA", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
 
                             sqlTransaction.Commit();
                             return Ok();

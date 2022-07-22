@@ -52,6 +52,23 @@ namespace PLANTILLA_API_ODATA.Controllers
             //setTokenCookie(response.RefreshToken);
 
         }
+        [HttpPost("LoginComercial")]
+        public IActionResult AuthenticateComercial([FromBody] AuthenticateRequest model)
+        {
+            AuthenticateResponse response = opeUsuarioService.AuthenticateComercial(model, ipAddress());
 
+            if (response == null)
+            {
+                return BadRequest(new { message = "Usuario o Contraseña Incorrecta" });
+            }
+            else
+            {
+                return Ok(response);
+
+            }
+
+            //setTokenCookie(response.RefreshToken);
+
+        }
     }
 }

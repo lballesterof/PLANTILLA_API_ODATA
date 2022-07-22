@@ -77,8 +77,6 @@ namespace PLANTILLA_API_ODATA
             services.AddTransient<IOpePedidoService, OpePedidoService>();
             services.AddTransient<IOpeUsuarioService, OpeUsuarioService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddSwaggerGen(options => options.DocumentFilter<RemoveSchemasFilter>());
-
             Global.ConnectionStrings = Configuration.GetConnectionString("DataContext");
             Global.Secret = Configuration.GetSection("AppSettings").ToString();
             services.AddSwaggerGen(c =>
