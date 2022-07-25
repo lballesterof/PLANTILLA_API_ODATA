@@ -7,8 +7,8 @@ namespace PLANTILLA_API_ODATA.Specifications.Stocks
     {
         public PagedStocksWarehouseSpecification(int pageSize, int pageNumber, string codbarra, string codigo, string codreferencia, string nombre)
         {
-            Query.Skip((pageNumber - 1) * pageSize)
-        .Take(pageSize);
+        //    Query.Skip((pageNumber - 1) * pageSize)
+        //.Take(pageSize);
 
             if (!string.IsNullOrEmpty(nombre))
                 Query.Search(x => x.Nombre, "%" + nombre + "%");
@@ -21,6 +21,8 @@ namespace PLANTILLA_API_ODATA.Specifications.Stocks
 
             if (!string.IsNullOrEmpty(codreferencia))
                 Query.Search(x => x.CdgRef, "%" + codreferencia + "%");
+
+            Query.OrderBy(x => x.Nombre);
         }
     }
 }

@@ -11,6 +11,8 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
         IQueryable<OpePedido> RetrieveAllPedidos();
         OpePedido PedidoWithDetail(string idPedido);
         CabeceraPedidoDTO SavePedido(CabeceraPedidoDTO pedido);
+        CabeceraPedidoDTO SavePedidoComercial(CabeceraPedidoDTO pedido);
+        CabeceraPedidoDTO UpdatePedido(CabeceraPedidoDTO pedido);
         public PrecuentaDTO PrecuentafinbyId(string idPedido);
         public List<ComandaDTO> ComandarfinbyIdAndComanda(string idPedido);
     }

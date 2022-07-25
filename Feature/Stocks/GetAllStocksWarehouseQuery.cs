@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PLANTILLA_API_ODATA.Feature.Stocks
 {
-    public class GetAllStocksWarehouseQuery: IRequest<PagedResponse<List<VwGetstockAllwarehousePricelist>>>
+    public class GetAllStocksWarehouseQuery: IRequest<List<VwGetstockAllwarehousePricelist>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
@@ -17,7 +17,7 @@ namespace PLANTILLA_API_ODATA.Feature.Stocks
         public string CodigoBarra { get; set; }
         public string CdgRef { get; set; }
         public string Nombre { get; set; }
-        public class GetAllStocksWarehouseQueryHandler : IRequestHandler<GetAllStocksWarehouseQuery, PagedResponse<List<VwGetstockAllwarehousePricelist>>>
+        public class GetAllStocksWarehouseQueryHandler : IRequestHandler<GetAllStocksWarehouseQuery, List<VwGetstockAllwarehousePricelist>>
         {
             private readonly IRepositoryAsync<VwGetstockAllwarehousePricelist> _repositoryAsync;
 
@@ -25,10 +25,10 @@ namespace PLANTILLA_API_ODATA.Feature.Stocks
             {
                 _repositoryAsync = repositoryAsync;
             }
-            public async Task<PagedResponse<List<VwGetstockAllwarehousePricelist>>> Handle(GetAllStocksWarehouseQuery request, CancellationToken cancellationToken)
+            public async Task<List<VwGetstockAllwarehousePricelist>> Handle(GetAllStocksWarehouseQuery request, CancellationToken cancellationToken)
             {
                   var  listadostocks = await _repositoryAsync.ListAsync(new PagedStocksWarehouseSpecification(request.PageSize, request.PageNumber, request.CodigoBarra, request.Codigo,request.CdgRef, request.Nombre));
-                  return new PagedResponse<List<VwGetstockAllwarehousePricelist>>(listadostocks, request.PageSize, request.PageNumber);
+                  return new List<VwGetstockAllwarehousePricelist>(listadostocks);
             }
         }
     }

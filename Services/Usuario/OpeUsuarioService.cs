@@ -126,7 +126,42 @@ namespace PLANTILLA_API_ODATA.Services.Usuario
 
         //    return true;
         //}
+        public AuthenticateResponse AuthenticateComercial(AuthenticateRequest model, string ipAddress)
+        {
 
+            IEnumerable<OpeUsuarioDTO> listado = null;
+            using (IDbConnection db = new SqlConnection(Global.ConnectionStrings))
+            {
+                if (db.State == ConnectionState.Closed) db.Open();
+                {
+
+                    DynamicParameters cmd = new DynamicParameters();
+                    cmd.Add("@USUARIO", model.Usuariomozo);
+                    cmd.Add("@CONTRASENA", model.Passmozo);
+                    var procedure = "GetLoginUser";
+
+                    listado = db.Query<OpeUsuarioDTO>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
+                    db.Dispose();
+                }
+            }
+
+
+            var user = listado.SingleOrDefault();
+
+            // return null if user not found
+            if (user == null) return null;
+
+            // authentication successful so generate jwt and refresh tokens
+            var jwtToken = generateJwtToken(user);
+            var refreshToken = generateRefreshToken(ipAddress);
+
+            // save refresh token
+            //user.RefreshTokens.Add(refreshToken);
+            //_context.Update(user);
+            //_context.SaveChanges();
+
+            return new AuthenticateResponse(user, jwtToken, refreshToken.Token);
+        }
 
         public OpeUsuario finById(string CODIGO)
         {

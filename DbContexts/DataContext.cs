@@ -19515,6 +19515,14 @@ namespace PLANTILLA_API_ODATA.DbContexts
                     .IsUnicode(false)
                     .HasColumnName("TIPO")
                     .IsFixedLength(true);
+
+                entity.Property(e => e.NombreMozo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOMBRE_MOZO")
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.IdPedido).HasColumnName("ID_PEDIDO");
             });
 
             modelBuilder.Entity<OpeMovbcoReq>(entity =>

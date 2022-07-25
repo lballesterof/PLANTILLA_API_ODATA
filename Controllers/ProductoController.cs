@@ -82,6 +82,35 @@ namespace PLANTILLA_API_ODATA.Controllers
         }
 
 
+        #region GetProducts 
+
+        //private string _connection = @"Data Source=DESKTOP-CKJNAHP;Initial Catalog=Test_Products;User ID=sa;Password=Qz0966lb";
+        [HttpGet("Comercial/{cdg_lista}/{CDG_MONEDA}/{TIPO_CAMBIO}")]
+        public IActionResult GetProducts(string cdg_lista, string CDG_MONEDA, string TIPO_CAMBIO)
+        {
+            IEnumerable<Productos> listado = null;
+            using (IDbConnection db = new SqlConnection(Global.ConnectionStrings))
+            {
+                if (db.State == ConnectionState.Closed) db.Open();
+                {
+
+                    DynamicParameters cmd = new DynamicParameters();
+                    cmd.Add("@CDG_LISTA", cdg_lista);
+                    cmd.Add("@CDG_MONEDA", CDG_MONEDA);
+                    cmd.Add("@TIPO_CAMBIO", TIPO_CAMBIO);
+                    var procedure = "GetDataProductoVta";
+
+                    listado = db.Query<Productos>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
+
+                }
+            }
+
+            return new JsonResult(listado);
+
+        }
+
+        #endregion
+
 
 
 
