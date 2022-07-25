@@ -50,6 +50,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
           List<DCotizacionV> Detpedido)
         {
             _document = new Document(PageSize.A4, 10f, 10f, 20f, 30f);
+            _document.AddAuthor("App Comercial Android US");
             PdfWriter.GetInstance(_document, _memoryStream);
             //PdfWriter.GetInstance(this._document, (Stream)this._memoryStream).PageEvent = (IPdfPageEvent)new RCotizaciones.itsEvents(ImhdFT);
             _document.Open();
