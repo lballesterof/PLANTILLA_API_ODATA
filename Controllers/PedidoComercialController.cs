@@ -42,7 +42,7 @@ namespace PLANTILLA_API_ODATA.Controllers
                     cmd.Add("@CDG_VENDEDOR", cdg_ven);
                     var procedure = "GetDataPedido";
 
-                    var listado2 = await db.QueryAsync<Pedido>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
+                    listado = await db.QueryAsync<Pedido>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
 
                 }
             }
