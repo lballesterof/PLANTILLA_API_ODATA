@@ -43,9 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DbContexts\" />
     <Folder Include="Commons\" />
     <Folder Include="Models\NewFolder\" />
+    <Folder Include="Services\Cuotas\" />
     <Folder Include="Services\Precuenta\" />
   </ItemGroup>
 

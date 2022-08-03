@@ -33,6 +33,7 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Cotizacion
         public string EMAIL_CONTACTO { get; set; }
         public string CONTACTO { get; set; }
         public string USUARIO_MODIFICACION { get; set; }
-
+        public string MONTOLETRA { get; set; }
+        public string VALIDEZ { get; set; }
     }
 }

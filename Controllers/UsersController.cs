@@ -70,5 +70,26 @@ namespace PLANTILLA_API_ODATA.Controllers
             //setTokenCookie(response.RefreshToken);
 
         }
+
+
+
+        [HttpPost("LoginClienteCuota")]
+        public IActionResult AuthenticateClienteCuota([FromBody] AuthenticateClienteCuotaRequest model)
+        {
+            AuthenticateResponse response = opeUsuarioService.AuthenticateClienteCuotas(model, ipAddress());
+
+            if (response == null)
+            {
+                return BadRequest(new { message = "Usuario o Contraseña Incorrecta" });
+            }
+            else
+            {
+                return Ok(response);
+
+            }
+
+            //setTokenCookie(response.RefreshToken);
+
+        }
     }
 }
