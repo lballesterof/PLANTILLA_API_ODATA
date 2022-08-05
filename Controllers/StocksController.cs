@@ -30,27 +30,24 @@ namespace PLANTILLA_API_ODATA.Controllers
                 CodigoBarra = filter.CodigoBarra
             });
             var listt = ListConsumed.GroupBy(item => item.Nombre)
-                .Select(grp => new
+            .Select(grp => new
+            {
+
+                Producto = grp.Key,
+                CodigoBarra = grp.First().CodigoBarra,
+                CodRef = grp.First().CdgRef,
+                Codigo = grp.First().Codigo,
+                Almacen = grp.Select(item =>
+                new
                 {
-
-                    Producto = grp.Key,
-                    CodigoBarra = grp.First().CodigoBarra,
-                    CodRef = grp.First().CdgRef,
-                    Codigo = grp.First().Codigo,
-                    Almacen = grp.Select(item =>
-                    new
-                    {
-                        item.Almacen,
-                        item.StockActual,
-                        item.Unidad,
-                        item.ListaPrecio,
-                        item.Mon,
-                        item.PrecioVenta
-                    })
-                }).ToList();
-
-
-
+                    item.Almacen,
+                    item.StockActual,
+                    item.Unidad,
+                    item.ListaPrecio,
+                    item.Mon,
+                    item.PrecioVenta
+                })
+            }).ToList();
             return Ok(listt);
 
         }
