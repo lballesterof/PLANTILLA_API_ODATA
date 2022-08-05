@@ -27,5 +27,7 @@
         public string? CENTRO_COSTO => null;
         public string? CDG_VENDEDOR { get; set; }
         public string? LISTA_PRECIO => "LPR0000001";
+        public string? RUC { get; set; }
+        public string? NOMBRE { get; set; }
     }
 }
