@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Copyright>Heyel SAC by Leonardo Ballestero</Copyright>
+    <Description>Servicio de paqueteria de APIS para software unosoft</Description>
+    <PackageIcon>api.png</PackageIcon>
+    <PackageId>HEYEL SAC</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Heyel SAC by Leonardo Ballestero</Authors>
+    <Company>Heyel SAC</Company>
+    <Product>Services Layers Unosoft</Product>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,6 +56,13 @@
     <Folder Include="Models\NewFolder\" />
     <Folder Include="Services\Cuotas\" />
     <Folder Include="Services\Precuenta\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\api.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
