@@ -20,25 +20,25 @@ using Microsoft.Extensions.Options;
 
 namespace PLANTILLA_API_ODATA.Services.Usuario
 {
-    public class OpeUsuarioService:IOpeUsuarioService
+    public class OpeUsuarioService : IOpeUsuarioService
     {
 
 
         private DataContext db;
         private readonly IMapper _mapper;
-      
+
 
         public OpeUsuarioService(DataContext context, IMapper mapper)
         {
             db = context;
             _mapper = mapper;
         }
-       
+
 
         public IQueryable<OpeUsuario> RetrieveAllUsers()
         {
             //_context = new DataContext();
-           List<OpeUsuario>_List =db.OpeUsuarios.ToList();
+            List<OpeUsuario> _List = db.OpeUsuarios.ToList();
             IQueryable<OpeUsuario> retrievedUsers = _List.AsQueryable();
             return retrievedUsers;
         }
@@ -179,7 +179,7 @@ namespace PLANTILLA_API_ODATA.Services.Usuario
                     new Claim(ClaimTypes.Name, user.USUARIO.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
-               
+
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -205,6 +205,35 @@ namespace PLANTILLA_API_ODATA.Services.Usuario
         public OpeUsuario finbyId(string id)
         {
             return db.OpeUsuarios.Find(id);
+        }
+
+        public AuthenticateResponse AuthenticateClienteCuotas(AuthenticateClienteCuotaRequest model, string ipAddress)
+        {
+            IEnumerable<OpeUsuarioDTO> listado = null;
+            using (IDbConnection db = new SqlConnection(Global.ConnectionStringsOptionals))
+            {
+                if (db.State == ConnectionState.Closed) db.Open();
+                {
+
+                    DynamicParameters cmd = new DynamicParameters();
+                    cmd.Add("@DNI", model.dni);
+                    cmd.Add("@CONTRASENA", model.password);
+                    var procedure = "GetLoginClientCuota";
+
+                    listado = db.Query<OpeUsuarioDTO>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
+                    db.Dispose();
+                }
+            }
+
+
+
+            var user = listado.SingleOrDefault();
+
+            // return null if user not found
+            if (user == null) return null;
+
+
+            return new AuthenticateResponse(user, "TOKENTEMP", "TOKENTEMP");
         }
     }
 }

@@ -12,9 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
-
 using MediatR;
-
 using Microsoft.OpenApi.Models;
 using PLANTILLA_API_ODATA.DbContexts;
 using PLANTILLA_API_ODATA.Models;
@@ -67,9 +65,12 @@ namespace PLANTILLA_API_ODATA
             //Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DataContext")).EnableSensitiveDataLogging()
             .EnableDetailedErrors());
+            services.AddDbContext<CuotasContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DataContextOptionals")).EnableSensitiveDataLogging()
+           .EnableDetailedErrors());
             services.AddControllers().AddOData(options =>
             options.Select().Filter().OrderBy().Expand().SetMaxTop(5000));
             services.AddTransient(typeof(IRepositoryAsync<>), typeof(USRepository<>));
+            services.AddTransient(typeof(IRepositoryAsync<>), typeof(CuotaRepository<>));
             services.AddTransient<IOpeTablaServices, OpeTablaServices>();
             services.AddTransient<IOpePersonaServices, OpePersonaServices>();
             services.AddTransient<IOpeMesaService, OpeMesaService>();
@@ -78,6 +79,7 @@ namespace PLANTILLA_API_ODATA
             services.AddTransient<IOpeUsuarioService, OpeUsuarioService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             Global.ConnectionStrings = Configuration.GetConnectionString("DataContext");
+            Global.ConnectionStringsOptionals = Configuration.GetConnectionString("DataContextOptionals");
             Global.Secret = Configuration.GetSection("AppSettings").ToString();
             services.AddSwaggerGen(c =>
             {
@@ -140,15 +142,15 @@ namespace PLANTILLA_API_ODATA
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebSUSPedido v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ServicesLayers API'S v1"));
             }
             app.UseSwagger();
             app.UseSwaggerUI(c =>
 
 
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebSUSPedido v1")
-            
-            ) ;
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "ServicesLayers API'S v1")
+
+            );
             ;
             IdentityModelEventSource.ShowPII = true;
 

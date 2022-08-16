@@ -9,6 +9,7 @@ namespace PLANTILLA_API_ODATA.Services.Usuario
         IQueryable<OpeUsuario> RetrieveAllUsers();
         AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress);
         AuthenticateResponse AuthenticateComercial(AuthenticateRequest model, string ipAddress);
+        AuthenticateResponse AuthenticateClienteCuotas(AuthenticateClienteCuotaRequest model, string ipAddress);
         //AuthenticateResponse RefreshToken(string token, string ipAddress);
         //bool RevokeToken(string token, string ipAddress);
 

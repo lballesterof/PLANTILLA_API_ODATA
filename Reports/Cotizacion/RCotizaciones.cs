@@ -81,11 +81,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.HorizontalAlignment = 1;
                 _pdfPCell.Border = 0;
                 TableTitulo.AddCell(_pdfPCell);
-                DateTime dateTime = cotizacionV.FECHA_COTIZACION;
-                string str1 = dateTime.ToString("dd/mm/yyyy HH:MM");
-                dateTime = DateTime.Now;
-                string str2 = dateTime.ToString("dd/mm/yyyy");
-                _pdfPCell = new PdfPCell(new Phrase("Fecha de Emisión: " + str1 + " / Fecha de Creación: " + str2, mediumfontSN));
+                _pdfPCell = new PdfPCell(new Phrase("Fecha de Emisión: " + DateTime.Today.ToString("dd/MM/yyyy") + " / Fecha de Creación: " + cotizacionV.FECHA_COTIZACION.ToString("dd/MM/yyyy"), mediumfontSN));
                 _pdfPCell.Border = 0;
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 1;
@@ -224,28 +220,28 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
             _pdfPCell.Colspan = 1;
             _pdfPCell.HorizontalAlignment = 1;
             TableItem.AddCell(_pdfPCell);
-            TableItem.SpacingAfter = 10f;
+            TableItem.SpacingAfter = 1f;
             _document.Add(TableItem);
             _pedidobody = detpedido;
             foreach (DCotizacionV dcotizacionV in _pedidobody)
             {
-                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.SECUENCIA.ToString(), letraChicaN));
+                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.SECUENCIA.ToString(), letraChica));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableProducto.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.NOMBRE, letraChicaN));
+                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.NOMBRE, letraChica));
                 _pdfPCell.Colspan = 6;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableProducto.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.CANTIDAD.ToString(), letraChicaN));
+                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.CANTIDAD.ToString(), letraChica));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableProducto.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.PRECIO.ToString("N2"), letraChicaN));
+                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.PRECIO.ToString("N2"), letraChica));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableProducto.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.IMPORTE.ToString("N2"), letraChicaN));
+                _pdfPCell = new PdfPCell(new Phrase(dcotizacionV.IMPORTE.ToString("N2"), letraChica));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableProducto.AddCell(_pdfPCell);
@@ -266,7 +262,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 8;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableSubTotal.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase("Subtotal:", letraChica));
+                _pdfPCell = new PdfPCell(new Phrase("Subtotal:", letraChicaN));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableSubTotal.AddCell(_pdfPCell);
@@ -280,7 +276,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 8;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableSubTotal.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase("Descuento:", letraChica));
+                _pdfPCell = new PdfPCell(new Phrase("Dscto:", letraChicaN));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableSubTotal.AddCell(_pdfPCell);
@@ -294,7 +290,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 8;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableSubTotal.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase("V.Venta:", letraChica));
+                _pdfPCell = new PdfPCell(new Phrase("V.Venta:", letraChicaN));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableSubTotal.AddCell(_pdfPCell);
@@ -308,7 +304,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 8;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableSubTotal.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase("IGV:18 %", letraChica));
+                _pdfPCell = new PdfPCell(new Phrase("IGV:18 %", letraChicaN));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableSubTotal.AddCell(_pdfPCell);
@@ -322,7 +318,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 8;
                 _pdfPCell.HorizontalAlignment = 1;
                 TableSubTotal.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase("Total " + cotizacionV.MON, letraChica));
+                _pdfPCell = new PdfPCell(new Phrase("Total " + cotizacionV.MON, letraChicaN));
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableSubTotal.AddCell(_pdfPCell);
@@ -333,7 +329,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 TableSubTotal.AddCell(_pdfPCell);
                 TableSubTotal.SpacingAfter = 10f;
                 _document.Add(TableSubTotal);
-                _pdfPCell = new PdfPCell(new Phrase("SON: DOS MIL SOLES CON 00 EXACTOS", letraChicaN));
+                _pdfPCell = new PdfPCell(new Phrase(cotizacionV.MONTOLETRA + " EXACTOS", letraChicaN));
                 _pdfPCell.Border = 0;
                 _pdfPCell.Colspan = 10;
                 _pdfPCell.HorizontalAlignment = 0;
@@ -378,7 +374,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 3;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableCondicion.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase("CONTADO DEPOSITO", letraChica));
+                _pdfPCell = new PdfPCell(new Phrase(cotizacionV.CONDICION_PAGO, letraChica));
                 _pdfPCell.Border = 0;
                 _pdfPCell.Colspan = 7;
                 _pdfPCell.HorizontalAlignment = 0;
@@ -388,7 +384,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 3;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableCondicion.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase("2  DIAS", letraChica));
+                _pdfPCell = new PdfPCell(new Phrase(cotizacionV.VALIDEZ +" DÍAS", letraChica));
                 _pdfPCell.Border = 0;
                 _pdfPCell.Colspan = 7;
                 _pdfPCell.HorizontalAlignment = 0;
