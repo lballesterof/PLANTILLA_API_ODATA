@@ -11,6 +11,8 @@
     <Authors>Heyel SAC by Leonardo Ballestero</Authors>
     <Company>Heyel SAC</Company>
     <Product>Services Layers Unosoft</Product>
+    <AssemblyName>ServicesLayerUS</AssemblyName>
+    <RootNamespace>ServicesLayerUS.Replace(" ", "_")</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

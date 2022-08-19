@@ -9,7 +9,7 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Pedido
     {
         public int Id_pedido { get; set; }
         public string Numero_Pedido { get; set; }
-        public DateTime Fecha_pedido { get; set; }
+        public string Fecha_pedido { get; set; }
         public string Persona { get; set; }
         public string Ruc { get; set; }
         public string Documento { get; set; }
