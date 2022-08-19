@@ -58211,6 +58211,116 @@ namespace PLANTILLA_API_ODATA.DbContexts
                     .HasColumnName("UNIDAD");
             });
 
+
+            modelBuilder.Entity<VwMbGetCuotasInmobiliarium>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("VW_MB_GET_CUOTAS_INMOBILIARIA");
+
+                entity.Property(e => e.Año).HasColumnName("AÑO");
+
+                entity.Property(e => e.Cuota)
+                    .HasColumnType("numeric(3, 0)")
+                    .HasColumnName("CUOTA");
+
+                entity.Property(e => e.Estado)
+                    .IsRequired()
+                    .HasMaxLength(9)
+                    .IsUnicode(false)
+                    .HasColumnName("ESTADO");
+
+                entity.Property(e => e.FechaVencimiento)
+                    .HasMaxLength(4000)
+                    .HasColumnName("FECHA_VENCIMIENTO");
+
+                entity.Property(e => e.Importe)
+                    .IsRequired()
+                    .HasMaxLength(1042)
+                    .IsUnicode(false)
+                    .HasColumnName("IMPORTE");
+
+                entity.Property(e => e.Mes)
+                    .HasMaxLength(4000)
+                    .HasColumnName("MES");
+
+                entity.Property(e => e.NumeroSerie)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("NUMERO_SERIE");
+
+                entity.Property(e => e.Ruc)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("RUC");
+            });
+
+            /*
+
+                        modelBuilder.Entity<V_OPEVW_VENTA_NETA>(entity =>
+                        {
+                            entity.HasNoKey();
+
+                            entity.ToView("OPEVW_VENTA_NETA");
+
+                            entity.Property(e => e.Ano)
+                           .IsRequired()
+                           .HasMaxLength(4)
+                           .IsUnicode(false)
+                           .HasColumnName("ANO")
+                           .IsFixedLength(true);
+
+
+
+                            entity.Property(e => e.CdgRef)
+                                .HasMaxLength(20)
+                                .IsUnicode(false)
+                                .HasColumnName("CDG_REF");
+
+                            entity.Property(e => e.Codigo)
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .IsUnicode(false)
+                                .HasColumnName("CODIGO");
+
+                            entity.Property(e => e.CodigoBarra)
+                                .HasMaxLength(500)
+                                .IsUnicode(false)
+                                .HasColumnName("CODIGO_BARRA");
+
+                            entity.Property(e => e.ListaPrecio)
+                                .HasMaxLength(200)
+                                .IsUnicode(false)
+                                .HasColumnName("LISTA_PRECIO");
+
+                            entity.Property(e => e.Mon)
+                                .HasMaxLength(1000)
+                                .IsUnicode(false)
+                                .HasColumnName("MON");
+
+                            entity.Property(e => e.Nombre)
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .IsUnicode(false)
+                                .HasColumnName("NOMBRE");
+
+                            entity.Property(e => e.PrecioVenta)
+                                .HasColumnType("numeric(14, 4)")
+                                .HasColumnName("PRECIO_VENTA");
+
+                            entity.Property(e => e.StockActual)
+                                .HasColumnType("numeric(38, 2)")
+                                .HasColumnName("STOCK_ACTUAL");
+
+                            entity.Property(e => e.Unidad)
+                                .HasMaxLength(1000)
+                                .IsUnicode(false)
+                                .HasColumnName("UNIDAD");
+                        });
+            */
+
+
             OnModelCreatingPartial(modelBuilder);
         }
 

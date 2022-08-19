@@ -70,7 +70,7 @@ namespace PLANTILLA_API_ODATA
             services.AddControllers().AddOData(options =>
             options.Select().Filter().OrderBy().Expand().SetMaxTop(5000));
             services.AddTransient(typeof(IRepositoryAsync<>), typeof(USRepository<>));
-            services.AddTransient(typeof(IRepositoryAsync<>), typeof(CuotaRepository<>));
+            //services.AddTransient(typeof(IRepositoryAsync<>), typeof(CuotaRepository<>));
             services.AddTransient<IOpeTablaServices, OpeTablaServices>();
             services.AddTransient<IOpePersonaServices, OpePersonaServices>();
             services.AddTransient<IOpeMesaService, OpeMesaService>();
