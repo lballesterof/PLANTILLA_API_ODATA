@@ -11,7 +11,7 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Cotizacion
 
         public string Numero_Cotizacion { get; set; }
 
-        public DateTime Fecha_Cotizacion { get; set; }
+        public string Fecha_Cotizacion { get; set; }
 
         public string Persona { get; set; }
 

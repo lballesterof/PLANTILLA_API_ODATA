@@ -117,7 +117,7 @@ namespace PLANTILLA_API_ODATA.Reports.PDFPedido
                 //TableTitulo.AddCell(_pdfPCell);
 
 
-                _pdfPCell = new PdfPCell(new Phrase("Fecha de Emisión: " + mped.Fecha_pedido.ToString("dd/mm/yyyy HH:MM") + " / " + "Fecha de Creación: " + DateTime.Now.ToString("dd/mm/yyyy"), mediumfontSN));
+                _pdfPCell = new PdfPCell(new Phrase("Fecha de Emisión: " + mped.Fecha_pedido + " / " + "Fecha de Creación: " + DateTime.Now.ToString("dd/mm/yyyy"), mediumfontSN));
                 _pdfPCell.Border = 0;
                 _pdfPCell.Colspan = 1;
                 _pdfPCell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -377,7 +377,7 @@ namespace PLANTILLA_API_ODATA.Reports.PDFPedido
             #region Grilla Subtotales
             foreach (var mped in _pedidocab)
             {
-                var fec_entrega = mped.Fecha_pedido.AddDays(2).ToString("dd/MM/yyyy");
+                var fec_entrega = DateTime.UtcNow.AddDays(2).ToString("dd/MM/yyyy");
                 _pdfPCell = new PdfPCell(new Phrase("                                          ", letraChica));
                 _pdfPCell.Border = 0;
                 _pdfPCell.Colspan = 18;
