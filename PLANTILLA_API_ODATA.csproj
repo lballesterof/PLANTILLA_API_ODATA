@@ -12,7 +12,7 @@
     <Company>Heyel SAC</Company>
     <Product>Services Layers Unosoft</Product>
     <AssemblyName>ServicesLayerUS</AssemblyName>
-    <RootNamespace>$(MSBuildProjectName)</RootNamespace>
+    <RootNamespace>ServicesLayerUS.Replace(" ", "_")</RootNamespace>
     <Title>ServicesLayersUS</Title>
   </PropertyGroup>
 

@@ -21,7 +21,7 @@ namespace PLANTILLA_API_ODATA.Services.Helpers.Common
             try
             {
                 IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
-                FromMailerConfig result = dbII.QuerySingleOrDefault<FromMailerConfig>("select REFERENCIA1 AS Servidor, REFERENCIA2 AS Puerto, REFERENCIA3 AS Correo, REFERENCIA4 AS PasswordMail,\r\nREFERENCIA5 AS SLL  from OPE_PARAMETRO where CODIGO = 'SENDMAIL'");
+                FromMailerConfig result = dbII.QuerySingleOrDefault<FromMailerConfig>("select REFERENCIA1 AS Servidor, REFERENCIA2 AS Puerto, REFERENCIA3 AS Correo, REFERENCIA4 AS PasswordMail,\r\nREFERENCIA5 AS SLL  from OPE_PARAMETRO where CODIGO = 'SENDEMAIL'");
 
                 if(String.IsNullOrEmpty(result.Correo) || String.IsNullOrEmpty(result.Correo) )
                 {

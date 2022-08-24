@@ -159,24 +159,7 @@ namespace PLANTILLA_API_ODATA
 
             app.UseAuthentication();
             app.UseAuthorization();
-            string path =
-            Path.Combine(env.ContentRootPath, "ContentEmails");
 
-
-
-            if (!Directory.Exists(path)) 
-            {
-                Directory.CreateDirectory(path);              
-            }
-
-
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                      Path.Combine(env.ContentRootPath, "ContentEmails")),
-                RequestPath = "/ContentEmails"
-
-            });
             app.UseEndpoints(x => x.MapControllers());
         }
     }
