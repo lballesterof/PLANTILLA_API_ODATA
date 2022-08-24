@@ -210,7 +210,7 @@ namespace PLANTILLA_API_ODATA.Services.Usuario
         public AuthenticateResponse AuthenticateClienteCuotas(AuthenticateClienteCuotaRequest model, string ipAddress)
         {
             IEnumerable<OpeUsuarioDTO> listado = null;
-            using (IDbConnection db = new SqlConnection(Global.ConnectionStringsOptionals))
+            using (IDbConnection db = new SqlConnection(Global.ConnectionStrings))
             {
                 if (db.State == ConnectionState.Closed) db.Open();
                 {

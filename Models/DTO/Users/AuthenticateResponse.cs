@@ -39,6 +39,7 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Users
         public string? CDG_VENDEDOR { get; set; }
         public string? RUC { get; set; }
         public string? NOMBRE { get; set; }
+        public int? FLOGIN { get; set; }
         public AuthenticateResponse(OpeUsuarioDTO user, string jwtToken, string refreshToken)
         {
             USUARIO = user.USUARIO;
@@ -62,6 +63,7 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Users
             CDG_VENDEDOR = user.CDG_VENDEDOR;
             RUC = user.RUC;
             NOMBRE = user.NOMBRE;
+            FLOGIN = user.FLOGIN;
         }
     }
 }

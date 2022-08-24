@@ -1,8 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,12 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using MediatR;
 using Microsoft.OpenApi.Models;
 using PLANTILLA_API_ODATA.DbContexts;
-using PLANTILLA_API_ODATA.Models;
 using PLANTILLA_API_ODATA.Services;
 using PLANTILLA_API_ODATA.Services.AutoMapper;
 using PLANTILLA_API_ODATA.Services.Helpers.Common;
@@ -24,12 +20,8 @@ using PLANTILLA_API_ODATA.Services.Pedido;
 using PLANTILLA_API_ODATA.Services.Persona;
 using PLANTILLA_API_ODATA.Services.Productos;
 using PLANTILLA_API_ODATA.Services.Usuario;
-using Rotativa.AspNetCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using IOpeMesaService = PLANTILLA_API_ODATA.Services.Mesas.IOpeMesaService;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
@@ -37,6 +29,8 @@ using System.Reflection;
 using PLANTILLA_API_ODATA.Interfaces;
 using PLANTILLA_API_ODATA.Repository;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace PLANTILLA_API_ODATA
 {
@@ -165,7 +159,24 @@ namespace PLANTILLA_API_ODATA
 
             app.UseAuthentication();
             app.UseAuthorization();
+            string path =
+            Path.Combine(env.ContentRootPath, "ContentEmails");
 
+
+
+            if (!Directory.Exists(path)) 
+            {
+                Directory.CreateDirectory(path);              
+            }
+
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                      Path.Combine(env.ContentRootPath, "ContentEmails")),
+                RequestPath = "/ContentEmails"
+
+            });
             app.UseEndpoints(x => x.MapControllers());
         }
     }
