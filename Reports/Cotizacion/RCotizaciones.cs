@@ -8,6 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using PLANTILLA_API_ODATA.Models.DTO.Cotizacion;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using PLANTILLA_API_ODATA.Services.Helpers.Common;
+using System.Data.Common;
+using System.Data;
+using PLANTILLA_API_ODATA.Models.DTO.ListaPrecio;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PLANTILLA_API_ODATA.Reports.Cotizacion
 {
@@ -43,16 +50,14 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
         private PdfPTable TableFirma = new PdfPTable(10);
         private PdfPTable TableVendedor = new PdfPTable(10);
         private PdfPTable TableClienteCab = new PdfPTable(20);
-
-
         public byte[] Report(
           List<CotizacionV> pedido,
           List<DCotizacionV> Detpedido)
         {
             _document = new Document(PageSize.A4, 10f, 10f, 20f, 30f);
             _document.AddAuthor("App Comercial Android US");
-            PdfWriter.GetInstance(_document, _memoryStream);
-            //PdfWriter.GetInstance(this._document, (Stream)this._memoryStream).PageEvent = (IPdfPageEvent)new RCotizaciones.itsEvents(ImhdFT);
+            //PdfWriter.GetInstance(_document, _memoryStream);
+            PdfWriter.GetInstance(this._document, (Stream)this._memoryStream).PageEvent = new RCotizaciones.itsEvents();
             _document.Open();
             ReportHeader(pedido);
             ReporBody(Detpedido);
@@ -63,6 +68,8 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
         }
         private void ReportHeader(List<CotizacionV> cbpedido)
         {
+
+
             _pedidocab = cbpedido;
             _pdfPCell = new PdfPCell(new Phrase("", mediumfontSN));
             _pdfPCell.Border = 0;
@@ -384,7 +391,7 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
                 _pdfPCell.Colspan = 3;
                 _pdfPCell.HorizontalAlignment = 0;
                 TableCondicion.AddCell(_pdfPCell);
-                _pdfPCell = new PdfPCell(new Phrase(cotizacionV.VALIDEZ +" DÍAS", letraChica));
+                _pdfPCell = new PdfPCell(new Phrase(cotizacionV.VALIDEZ + " DÍAS", letraChica));
                 _pdfPCell.Border = 0;
                 _pdfPCell.Colspan = 7;
                 _pdfPCell.HorizontalAlignment = 0;
@@ -443,50 +450,72 @@ namespace PLANTILLA_API_ODATA.Reports.Cotizacion
             TableVendedor.AddCell(_pdfPCell);
             _document.Add(TableVendedor);
         }
+        public class itsEvents : PdfPageEventHelper
+        {
 
-        //public class itsEvents : PdfPageEventHelper
-        //{
-        //    private List<ImgHeadFoot> imghdft;
+            public override void OnStartPage(PdfWriter writer, Document document)
+            {
+                IDbConnection dbConnection = (IDbConnection)new SqlConnection(Global.ConnectionStrings);
+                if (dbConnection.State == ConnectionState.Closed)
 
-        //    public itsEvents(List<ImgHeadFoot> imgbyte)
-        //    {
-        //    }
+                {
+                    dbConnection.Open();
+                }
 
-        //    public override void OnStartPage(PdfWriter writer, Document document)
-        //    {
-        //        List<ImgHeadFoot> imghdft = this.imghdft;
-        //        iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance("~/Images/Logogrouptito.png");
-        //        instance.SetAbsolutePosition(10f, 750f);
-        //        instance.ScaleAbsoluteWidth(80f);
-        //        instance.ScaleAbsoluteHeight(80f);
-        //        PdfPTable pdfPtable = new PdfPTable(1);
-        //        pdfPtable.WidthPercentage = 100f;
-        //        float[] relativeWidths = new float[1] { 10f };
-        //        pdfPtable.SetWidths(relativeWidths);
-        //        PdfPCell cell = new PdfPCell(instance);
-        //        cell.Border = 0;
-        //        cell.VerticalAlignment = 4;
-        //        cell.HorizontalAlignment = 0;
-        //        pdfPtable.AddCell(cell);
-        //        document.Add((IElement)pdfPtable);
-        //    }
+                DynamicParameters dynamicParameters1 = new DynamicParameters();
+                IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
+                var sql = "select IMAGEN_FOOTER from OPE_EMPRESA ;";
+                var sql1 = "select REFERENCIA2 as Height, REFERENCIA1 as Width  from OPE_PARAMETRO where CODIGO = 'ANAL_CPDF';";
+                byte[] result = (byte[])dbConnection.ExecuteScalar(sql, dynamicParameters1);
+                ImageDimensionsPDF dimensions = dbConnection.QueryFirstOrDefault<ImageDimensionsPDF>(sql1, dynamicParameters1);
+                iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance(result);
+                instance.SetAbsolutePosition(10f, 750f);
+                instance.ScaleAbsoluteWidth(dimensions.Width);
+                instance.ScaleAbsoluteHeight(dimensions.Height);
+                PdfPTable pdfPtable = new PdfPTable(1);
+                pdfPtable.WidthPercentage = 100f;
+                float[] relativeWidths = new float[1] { 10f };
+                pdfPtable.SetWidths(relativeWidths);
+                PdfPCell cell = new PdfPCell(instance);
+                cell.Border = 0;
+                cell.VerticalAlignment = 4;
+                cell.HorizontalAlignment = 0;
+                pdfPtable.AddCell(cell);
+                document.Add((IElement)pdfPtable);
+             
+                dbConnection.Dispose();
+            }
 
-        //    public override void OnEndPage(PdfWriter writer, Document document)
-        //    {
-        //        iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance("~/Images/Logogrouptito.png");
-        //        instance.SetAbsolutePosition(0.0f, 0.0f);
-        //        instance.ScaleAbsoluteWidth(450f);
-        //        instance.ScaleAbsoluteHeight(100f);
-        //        PdfPTable pdfPtable = new PdfPTable(1);
-        //        pdfPtable.WidthPercentage = 100f;
-        //        float[] relativeWidths = new float[1] { 10f };
-        //        pdfPtable.SetWidths(relativeWidths);
-        //        PdfPCell cell = new PdfPCell(instance);
-        //        cell.Border = 0;
-        //        cell.HorizontalAlignment = 0;
-        //        pdfPtable.AddCell(cell);
-        //        document.Add((IElement)pdfPtable);
-        //    }
-        //}
+            public override void OnEndPage(PdfWriter writer, Document document)
+            {
+                IDbConnection dbConnection = (IDbConnection)new SqlConnection(Global.ConnectionStrings);
+                if (dbConnection.State == ConnectionState.Closed)
+
+                {
+                    dbConnection.Open();
+                }
+                DynamicParameters dynamicParameters1 = new DynamicParameters();
+                IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
+                var sql = "select IMAGEN_HEADER from OPE_EMPRESA ;";
+                var sql1 = "select REFERENCIA4  as Height, REFERENCIA3 as Width  from OPE_PARAMETRO where CODIGO = 'ANAL_CPDF';";
+                byte[] result = (byte[])dbConnection.ExecuteScalar(sql, dynamicParameters1);
+                ImageDimensionsPDF dimensions = dbConnection.QueryFirstOrDefault<ImageDimensionsPDF>(sql1, dynamicParameters1);
+                iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance(result);
+                instance.SetAbsolutePosition(0f, 0f);
+                instance.ScaleAbsoluteWidth(dimensions.Width);
+                instance.ScaleAbsoluteHeight(dimensions.Height);
+                PdfPTable pdfPtable = new PdfPTable(1);
+                pdfPtable.WidthPercentage = 100f;
+                float[] relativeWidths = new float[1] { 10f };
+                pdfPtable.SetWidths(relativeWidths);
+                PdfPCell cell = new PdfPCell(instance);
+                cell.Border = 0;
+                cell.HorizontalAlignment = 0;
+                pdfPtable.AddCell(cell);
+                document.Add((IElement)pdfPtable);
+                dbConnection.Dispose();
+
+            }
+        }
     }
 }

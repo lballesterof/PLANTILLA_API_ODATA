@@ -22642,6 +22642,22 @@ namespace PLANTILLA_API_ODATA.DbContexts
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("ZONA_VENTA");
+
+                entity.Property(e => e.AppContrasena)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("APP_CONTRASENA");
+                entity.Property(e => e.CodigoActivacion)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("CODIGO_ACTIVACION");
+
+                entity.Property(e => e.FechaExpira)
+                    .HasColumnType("datetime")
+                    .HasColumnName("FECHA_EXPIRA");
+
+
+
             });
 
             modelBuilder.Entity<OpePlanFabricacion>(entity =>

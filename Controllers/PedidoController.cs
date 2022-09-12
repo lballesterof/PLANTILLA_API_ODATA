@@ -80,8 +80,6 @@ namespace PLANTILLA_API_ODATA.Controllers
 			return Ok(newpedido);
 		}
 		#endregion
-
-
 		#region Comandar
 		[HttpGet("Comanda")]
 		public IActionResult ImprimirComanda(string idPedido)
@@ -90,9 +88,6 @@ namespace PLANTILLA_API_ODATA.Controllers
 			return Ok(_services.ComandarfinbyIdAndComanda(idPedido));
 		}
 		#endregion
-
-
-
 	}
 
 }

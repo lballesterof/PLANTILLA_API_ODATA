@@ -1,10 +1,16 @@
-﻿using iTextSharp.text;
+﻿using Dapper;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
+using PLANTILLA_API_ODATA.Models.DTO.ListaPrecio;
 using PLANTILLA_API_ODATA.Models.DTO.Pedido;
 using PLANTILLA_API_ODATA.Models.DTO.Pedido.PDF;
+using PLANTILLA_API_ODATA.Reports.Cotizacion;
+using PLANTILLA_API_ODATA.Services.Helpers.Common;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 
 namespace PLANTILLA_API_ODATA.Reports.PDFPedido
@@ -48,30 +54,79 @@ namespace PLANTILLA_API_ODATA.Reports.PDFPedido
         #endregion
 
 
-        //class HeaderFooter : PdfPageEventHelper
-        //{
-        //    public override void OnEndPage(PdfWriter writer, Document document)
-        //    {
-        //        //base.OnEndPage(writer, document);
-        //        PdfPTable tbHeader = new PdfPTable(3);
-        //        tbHeader.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
-        //        tbHeader.DefaultCell.Border = 0;
+        public class itsEvents : PdfPageEventHelper
+        {
 
+            public override void OnStartPage(PdfWriter writer, Document document)
+            {
+                IDbConnection dbConnection = (IDbConnection)new SqlConnection(Global.ConnectionStrings);
+                if (dbConnection.State == ConnectionState.Closed)
 
+                {
+                    dbConnection.Open();
+                }
 
-        //        PdfPTable tbFooter = new PdfPTable(3);
-        //        tbFooter.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
-        //        tbFooter.DefaultCell.Border = 0;
+                DynamicParameters dynamicParameters1 = new DynamicParameters();
+                IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
+                var sql = "select IMAGEN_FOOTER from OPE_EMPRESA ;";
+                var sql1 = "select REFERENCIA2 as Height, REFERENCIA1 as Width  from OPE_PARAMETRO where CODIGO = 'ANAL_CPDF';";
+                byte[] result = (byte[])dbConnection.ExecuteScalar(sql, dynamicParameters1);
+                ImageDimensionsPDF dimensions = dbConnection.QueryFirstOrDefault<ImageDimensionsPDF>(sql1, dynamicParameters1);
+                iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance(result);
+                instance.SetAbsolutePosition(10f, 750f);
+                instance.ScaleAbsoluteWidth(dimensions.Width);
+                instance.ScaleAbsoluteHeight(dimensions.Height);
+                PdfPTable pdfPtable = new PdfPTable(1);
+                pdfPtable.WidthPercentage = 100f;
+                float[] relativeWidths = new float[1] { 10f };
+                pdfPtable.SetWidths(relativeWidths);
+                PdfPCell cell = new PdfPCell(instance);
+                cell.Border = 0;
+                cell.VerticalAlignment = 4;
+                cell.HorizontalAlignment = 0;
+                pdfPtable.AddCell(cell);
+                document.Add((IElement)pdfPtable);
 
-        //    }
+                dbConnection.Dispose();
+            }
 
-        //}
+            public override void OnEndPage(PdfWriter writer, Document document)
+            {
+                IDbConnection dbConnection = (IDbConnection)new SqlConnection(Global.ConnectionStrings);
+                if (dbConnection.State == ConnectionState.Closed)
+
+                {
+                    dbConnection.Open();
+                }
+                DynamicParameters dynamicParameters1 = new DynamicParameters();
+                IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
+                var sql = "select IMAGEN_HEADER from OPE_EMPRESA ;";
+                var sql1 = "select REFERENCIA4  as Height, REFERENCIA3 as Width  from OPE_PARAMETRO where CODIGO = 'ANAL_CPDF';";
+                byte[] result = (byte[])dbConnection.ExecuteScalar(sql, dynamicParameters1);
+                ImageDimensionsPDF dimensions = dbConnection.QueryFirstOrDefault<ImageDimensionsPDF>(sql1, dynamicParameters1);
+                iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance(result);
+                instance.SetAbsolutePosition(0f, 0f);
+                instance.ScaleAbsoluteWidth(dimensions.Width);
+                instance.ScaleAbsoluteHeight(dimensions.Height);
+                PdfPTable pdfPtable = new PdfPTable(1);
+                pdfPtable.WidthPercentage = 100f;
+                float[] relativeWidths = new float[1] { 10f };
+                pdfPtable.SetWidths(relativeWidths);
+                PdfPCell cell = new PdfPCell(instance);
+                cell.Border = 0;
+                cell.HorizontalAlignment = 0;
+                pdfPtable.AddCell(cell);
+                document.Add((IElement)pdfPtable);
+                dbConnection.Dispose();
+
+            }
+        }
 
         public byte[] Report(List<Pedido> pedido, List<DPedidoV> Detpedido)
         {
 
             _document = new Document(PageSize.A4, 10f, 10f, 20f, 30f);
-            PdfWriter.GetInstance(_document, _memoryStream);
+            PdfWriter.GetInstance(_document, _memoryStream).PageEvent = new RCotizaciones.itsEvents();
             _document.Open();
 
 
@@ -291,31 +346,6 @@ namespace PLANTILLA_API_ODATA.Reports.PDFPedido
 
         }
 
-        //private PdfPTable AddLogo()
-        //{
-        //    int maxColumn = 1;
-        //    PdfPTable pdfPTable = new PdfPTable(1);
-
-        //    string path = _oHostEnvironment.WebRootPath + "/Images";
-        //    string imgCombine = Path.Combine(path, "ThumbIKR_Logo.png");
-        //    Image img = Image.GetInstance(imgCombine);
-
-        //    _pdfPCell = new PdfPCell(img);
-        //    _pdfPCell.Colspan = 1;
-        //    _pdfPCell.HorizontalAlignment = Element.ALIGN_LEFT;
-        //    _pdfPCell.Border = 0;
-        //    _pdfPCell.ExtraParagraphSpace = 0;
-        //    pdfPTable.AddCell(_pdfPCell);
-
-        //    pdfPTable.CompleteRow();
-
-        //    return pdfPTable;
-        //}
-        //private PdfPTable SetPageTitle()
-        //{
-
-
-        //}
 
         private void ReporBody(List<DPedidoV> detpedido)
         {

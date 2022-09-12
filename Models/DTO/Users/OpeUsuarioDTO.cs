@@ -29,5 +29,6 @@
         public string? LISTA_PRECIO => "LPR0000001";
         public string? RUC { get; set; }
         public string? NOMBRE { get; set; }
+        public int? FLOGIN { get; set; }
     }
 }

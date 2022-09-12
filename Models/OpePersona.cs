@@ -117,5 +117,8 @@ namespace PLANTILLA_API_ODATA.Models
         public string Ocupacion { get; set; }
         public string Seguro { get; set; }
         public decimal? IdProspecto { get; set; }
+        public string? AppContrasena { get; set; }
+        public string? CodigoActivacion { get; set; }
+        public DateTime? FechaExpira { get; set; }
     }
 }
