@@ -58,19 +58,19 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                         dynamicParameters1.Add("@CONTACTO", (object)pedido.CONTACTO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@EMAIL_CONTACTO", (object)pedido.EMAIL_CONTACTO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@LUGAR_ENTREGA", (object)pedido.LUGAR_ENTREGA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                        dynamicParameters1.Add("@FACTURA_ADELANTADA", (object)pedido.FACTURA_ADELANTADA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                        dynamicParameters1.Add("@ID_COTIZACION", (object)pedido.ID_COTIZACION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
+                        dynamicParameters1.Add("@FACTURA_ADELANTADA",'0');
+                        dynamicParameters1.Add("@ID_COTIZACION",0);
                         dynamicParameters1.Add("@CODIGO_EMPRESA", (object)pedido.CODIGO_EMPRESA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@CODIGO_SUCURSAL", (object)pedido.CODIGO_SUCURSAL, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@USUARIO", (object)pedido.USUARIO_AUTORIZA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@COMISION", (object)pedido.COMISION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                        dynamicParameters1.Add("@PUNTO_VENTA", (object)pedido.PUNTO_VENTA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
+                        dynamicParameters1.Add("@PUNTO_VENTA", '1');
                         dynamicParameters1.Add("@REDONDEO", (object)pedido.REDONDEO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@VALIDEZ", (object)pedido.VALIDEZ, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@MOTIVO", (object)pedido.MOTIVO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@CORRELATIVO", (object)pedido.CORRELATIVO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                        dynamicParameters1.Add("@CENTRO_COSTO", (object)pedido.CENTRO_COSTO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                        dynamicParameters1.Add("@TIPO_CAMBIO", (object)pedido.TIPO_CAMBIO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
+                        dynamicParameters1.Add("@CENTRO_COSTO", "70");
+                        dynamicParameters1.Add("@TIPO_CAMBIO",4.00);
                         dynamicParameters1.Add("@SUCURSAL", (object)pedido.SUCURSAL, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@SERIE", (object)pedido.SERIE, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@MESA", (object)pedido.MESA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
@@ -231,7 +231,7 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                             dynamicParameters2.Add("@SWT_FREE", 'N');
                             dynamicParameters2.Add("@POR_DETRACCION", 0);
                             dynamicParameters2.Add("@DETRACCION", 0);
-                            dynamicParameters2.Add("@COMANDA", null);
+                            dynamicParameters2.Add("@COMANDA", (object)devolucionDetalle.COMANDA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             db.ExecuteScalar("InsertDetallePedido", (object)dynamicParameters2, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
                         }
 
