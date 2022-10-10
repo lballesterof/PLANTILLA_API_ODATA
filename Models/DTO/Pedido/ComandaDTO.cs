@@ -8,7 +8,6 @@ namespace PLANTILLA_API_ODATA.Models.DTO.Pedido
         public string DESTINO { get; set; }
         public string ZONA { get; set; }
         public string MESA { get; set; }
-        public string COMANDA { get; set; }
         public string MESERO { get; set; }
         public string RUTACOMANDA { get; set; }
         public string FECHAYHORA { get; set; }
