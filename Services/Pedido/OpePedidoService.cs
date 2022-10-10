@@ -118,7 +118,6 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                             dynamicParameters2.Add("@POR_DETRACCION", (object)devolucionDetalle.POR_DETRACCION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             dynamicParameters2.Add("@DETRACCION", (object)devolucionDetalle.DETRACCION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             dynamicParameters2.Add("@COMANDA", (object)devolucionDetalle.COMANDA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                            dynamicParameters2.Add("@FLAG_COLOR", (object)devolucionDetalle.FLAG_COLOR, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             db.ExecuteScalar("InsertDetallePedido", (object)dynamicParameters2, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
                         }
                        
@@ -329,14 +328,9 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                     cmd2.Add("@ID_DOCUMENTO", idPedido);
                     cmd2.Add("@COMANDA", item.COMANDA);
                     _DTOBase = db.QueryFirstOrDefaultAsync<ComandaDTO>(procedure, cmd2, commandType: CommandType.StoredProcedure).Result;
-                    _DTOBase.COMANDA = item.COMANDA;
+
                     _DTOBase.Detalle = db.Query<DetalleComandarDTO>(proceduredetalle, cmd2, commandType: System.Data.CommandType.StoredProcedure).ToList();
-                    if (!_DTOBase.Detalle.Count().Equals(0))
-                    {
-                        _DTORETURN.Add(_DTOBase);
-
-                    }
-
+                    _DTORETURN.Add(_DTOBase);
                 }
 
     

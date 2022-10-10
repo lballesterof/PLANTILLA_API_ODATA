@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using PLANTILLA_API_ODATA.Services.Helpers.Common;
-using System;
 
 namespace PLANTILLA_API_ODATA.Controllers
 {
@@ -85,86 +84,11 @@ namespace PLANTILLA_API_ODATA.Controllers
 		[HttpGet("Comanda")]
 		public IActionResult ImprimirComanda(string idPedido)
 		{
-            ComandaDTO _DTOBase = new ComandaDTO();
-            List<ComandaDTO> _DTORETURN = new List<ComandaDTO>();
-            List<NumeroComandaDTO> _ListadoComandas = new List<NumeroComandaDTO>();
-            PrecuentaDTO DTOMaster = new PrecuentaDTO();
 
-            using (IDbConnection db = new SqlConnection(Global.ConnectionStrings))
-            {
-
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-                DynamicParameters cmd = new DynamicParameters();
-                cmd.Add("@ID_PEDIDO", idPedido);
-
-                var procedure = "OPESS_OBTENER_COMANDAR_API_CABECERA";
-                var proceduredetalle = "OPESS_OBTENER_COMANDAR_API_DETALLE";
-                var procedurecomanda = "APP_RESTA_LISTAR_COMANDA";
-                _ListadoComandas = db.Query<NumeroComandaDTO>(procedurecomanda, cmd, commandType: System.Data.CommandType.StoredProcedure).ToList();
-
-                foreach (var item in _ListadoComandas)
-                {
-                    DynamicParameters cmd2 = new DynamicParameters();
-                    cmd2.Add("@ID_DOCUMENTO", idPedido);
-                    cmd2.Add("@COMANDA", item.COMANDA);
-                    _DTOBase = db.QueryFirstOrDefaultAsync<ComandaDTO>(procedure, cmd2, commandType: CommandType.StoredProcedure).Result;
-                    _DTOBase.COMANDA = item.COMANDA;
-                    _DTOBase.Detalle = db.Query<DetalleComandarDTO>(proceduredetalle, cmd2, commandType: System.Data.CommandType.StoredProcedure).ToList();
-                    if (!_DTOBase.Detalle.Count().Equals(0))
-                    {
-                        _DTORETURN.Add(_DTOBase);
-
-                    }
-
-                }
-
-                db.Dispose();
-
-            }
-			
-
-			if(_DTORETURN.Count().Equals(0))
-			{
-				return NoContent();
-            }
-			else {
-                return Ok(_DTORETURN);
-            }
-
+			return Ok(_services.ComandarfinbyIdAndComanda(idPedido));
 		}
-        #endregion
-        #region Actualizar detalle comandado
-        [HttpPut("EstadoComandado/{comanda}/{idpedido}")]
-        public IActionResult UpdateEstado(string comanda, int idpedido)
-        {
-
-            using (IDbConnection cnn = (IDbConnection)new SqlConnection(Global.ConnectionStrings))
-            {
-                cnn.Open();
-                using (SqlTransaction sqlTransaction = (SqlTransaction)cnn.BeginTransaction())
-                {
-                    try
-                    {
-                        var parameters = new { COMANDA = comanda, IDPEDIDO = idpedido };
-                        IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
-                        var sql = "UPDATE OPE_DETALLE_PEDIDO SET FLAG_COLOR = '1' WHERE COMANDA =@COMANDA AND ID_PEDIDO = @IDPEDIDO;";
-                        var result = dbII.Query(sql, parameters);
-                        return NoContent();
-                    }
-                    catch (Exception ex)
-                    {
-                        sqlTransaction.Rollback();
-                        return BadRequest(ex.Message);
-                        throw;
-                    }
-                }
-                cnn.Dispose();
-
-            }
-        }
-        #endregion
-    }
+		#endregion
+	}
 
 }
 
