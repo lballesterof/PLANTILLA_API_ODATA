@@ -55,7 +55,7 @@ namespace PLANTILLA_API_ODATA.Services.Usuario
                     DynamicParameters cmd = new DynamicParameters();
                     cmd.Add("@DNI", model.Usuariomozo);
                     cmd.Add("@CONTRASENA", model.Passmozo);
-                    var procedure = "APP_COMANDA_LOGIN_USER";
+                    var procedure = "APP_MOBILE_LOGIN_USER";
 
                     listado = db.Query<OpeUsuarioDTO>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
                     db.Dispose();
