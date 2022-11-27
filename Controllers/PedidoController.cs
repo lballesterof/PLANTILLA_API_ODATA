@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using PLANTILLA_API_ODATA.Services.Helpers.Common;
+using System;
 
 namespace PLANTILLA_API_ODATA.Controllers
 {
@@ -87,8 +88,41 @@ namespace PLANTILLA_API_ODATA.Controllers
 
 			return Ok(_services.ComandarfinbyIdAndComanda(idPedido));
 		}
-		#endregion
-	}
+        #endregion
+
+
+        #region Actualizar detalle comandado
+        [HttpPut("EstadoComandado/{comanda}/{idpedido}")]
+        public IActionResult UpdateEstado(string comanda, int idpedido)
+        {
+
+            using (IDbConnection cnn = (IDbConnection)new SqlConnection(Global.ConnectionStrings))
+            {
+                cnn.Open();
+                using (SqlTransaction sqlTransaction = (SqlTransaction)cnn.BeginTransaction())
+                {
+                    try
+                    {
+                        var parameters = new { COMANDA = comanda, IDPEDIDO = idpedido };
+                        IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
+                        var sql = "UPDATE OPE_DETALLE_PEDIDO SET FLAG_COLOR = '1' WHERE COMANDA =@COMANDA AND ID_PEDIDO = @IDPEDIDO;";
+                        var result = dbII.Query(sql, parameters);
+                        return NoContent();
+                    }
+                    catch (Exception ex)
+                    {
+                        sqlTransaction.Rollback();
+                        return BadRequest(ex.Message);
+                        throw;
+                    }
+                }
+                cnn.Dispose();
+
+            }
+        }
+        #endregion
+    }
+
 
 }
 

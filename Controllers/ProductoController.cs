@@ -68,7 +68,7 @@ namespace PLANTILLA_API_ODATA.Controllers
                 dynamicParameters1.Add("@CDG_CATEGORIA", nombrecategoria);
                 dynamicParameters1.Add("@TIPO_CLIENTE", "LPR0000001");
                 dynamicParameters1.Add("@MONEDA", moneda);
-                string str = "OPESS_OBTENER_PRODUCTO_NOMBRECATEGORIA";
+                string str = "APP_MOBILE_OBTENER_PRODUCTO_NOMBRECATEGORIA";
                 IDbConnection cnn = db;
                 string sql = str;
                 DynamicParameters dynamicParameters2 = dynamicParameters1;
@@ -98,7 +98,7 @@ namespace PLANTILLA_API_ODATA.Controllers
                     cmd.Add("@CDG_LISTA", cdg_lista);
                     cmd.Add("@CDG_MONEDA", CDG_MONEDA);
                     cmd.Add("@TIPO_CAMBIO", TIPO_CAMBIO);
-                    var procedure = "GetDataProductoVta";
+                    var procedure = "APP_MOBILE_GET_ALL_SALE_PRODUCTS";
 
                     listado = db.Query<Productos>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
 

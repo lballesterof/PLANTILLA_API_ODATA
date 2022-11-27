@@ -75,7 +75,7 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                         dynamicParameters1.Add("@SERIE", (object)pedido.SERIE, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@MESA", (object)pedido.MESA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                         dynamicParameters1.Add("@PISO", (object)pedido.PISO, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                        int num = db.ExecuteScalar<int>("InsertPedidoVenta_Comanda", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
+                        int num = db.ExecuteScalar<int>("APP_MOBILE_INSERT_SALEORDER_COMMAND_MASTER", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
                         var parameters = new {IdPedido = num };
                         IDbConnection dbII = new SqlConnection(Global.ConnectionStrings);
                         var sql = "SELECT ID_PEDIDO FROM OPE_DETALLE_PEDIDO WHERE ID_PEDIDO = @IdPedido ;";     
@@ -118,7 +118,8 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                             dynamicParameters2.Add("@POR_DETRACCION", (object)devolucionDetalle.POR_DETRACCION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             dynamicParameters2.Add("@DETRACCION", (object)devolucionDetalle.DETRACCION, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
                             dynamicParameters2.Add("@COMANDA", (object)devolucionDetalle.COMANDA, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
-                            db.ExecuteScalar("InsertDetallePedido", (object)dynamicParameters2, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
+                            dynamicParameters2.Add("@FLAG_COLOR", (object)devolucionDetalle.FLAG_COLOR, new DbType?(), new ParameterDirection?(), new int?(), new byte?(), new byte?());
+                            db.ExecuteScalar("APP_MOBILE_INSERT_SALEORDER_COMMAND_DETAIL", (object)dynamicParameters2, (IDbTransaction)sqlTransaction, new int?(), new CommandType?(CommandType.StoredProcedure));
                         }
                        
                         var parametersII = new { IdMesa = (object)pedido.MESA, IdZona = (object)pedido.PISO, IdPedido = num };
@@ -270,13 +271,11 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                     db.Open();
                 DynamicParameters cmd = new DynamicParameters();
                 cmd.Add("@ID_DOCUMENTO", idPedido);
-                var procedure = "OPESS_CONSULTA_PED_RESTFEALL_API_CABECERA";
-                var proceduredetalle = "OPESS_CONSULTA_PED_RESTFEALL_API";
+                var procedure = "APP_MOBILE_GET_PREORDER_BYID_MASTER";
+                var proceduredetalle = "APP_MOBILE_GET_PREORDER_BYID_DETAIL";
                 _DTOBase = db.Query<PrecuentaDTO>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 var detalle = db.Query<DetalleprecuentaDTO>(proceduredetalle, cmd, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 List<DetalleprecuentaDTO> dt = new List<DetalleprecuentaDTO>(detalle);
-
-
                 foreach (var item in _DTOBase)
                 {
                     DTOMaster.NUMERO_PEDIDO = item.NUMERO_PEDIDO;
@@ -289,13 +288,10 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
                     DTOMaster.FECHAYHORA = item.FECHAYHORA;
                     DTOMaster.ZONA = item.ZONA;
                     DTOMaster.detalle = dt;
-
-
                 }
               
                 db.Dispose();
             }
-
             return DTOMaster;
 
 
@@ -311,36 +307,31 @@ namespace PLANTILLA_API_ODATA.Services.Pedido
 
             using (IDbConnection db = new SqlConnection(Global.ConnectionStrings))
             {
-
                 if (db.State == ConnectionState.Closed)
                     db.Open();
                 DynamicParameters cmd = new DynamicParameters();
                 cmd.Add("@ID_PEDIDO", idPedido);
-
-                var procedure = "OPESS_OBTENER_COMANDAR_API_CABECERA";
-                var proceduredetalle = "OPESS_OBTENER_COMANDAR_API_DETALLE";
-                var procedurecomanda = "APP_RESTA_LISTAR_COMANDA";
+                var procedure = "APP_MOBILE_GET_AVAILABLE_PRINTORDER_BYID_MASTER";
+                var proceduredetalle = "APP_MOBILE_GET_AVAILABLE_PRINTORDER_BYID_DETAIL";
+                var procedurecomanda = "APP_MOBILE_GET_LIST_COMMANDS_PRINTERS";
                 _ListadoComandas = db.Query<NumeroComandaDTO>(procedurecomanda, cmd, commandType: System.Data.CommandType.StoredProcedure).ToList();
-
                 foreach (var item in _ListadoComandas)
                 {
                     DynamicParameters cmd2 = new DynamicParameters();
                     cmd2.Add("@ID_DOCUMENTO", idPedido);
                     cmd2.Add("@COMANDA", item.COMANDA);
                     _DTOBase = db.QueryFirstOrDefaultAsync<ComandaDTO>(procedure, cmd2, commandType: CommandType.StoredProcedure).Result;
-
+                    _DTOBase.COMANDA = item.COMANDA;
                     _DTOBase.Detalle = db.Query<DetalleComandarDTO>(proceduredetalle, cmd2, commandType: System.Data.CommandType.StoredProcedure).ToList();
-                    _DTORETURN.Add(_DTOBase);
+                    if (!_DTOBase.Detalle.Count().Equals(0))
+                    {
+                        _DTORETURN.Add(_DTOBase);
+                    }
                 }
-
-    
-
                 db.Dispose();
             }
 
             return _DTORETURN;
-
-
         }
 
         public OpePedido PedidoWithDetail(string idPedido)
