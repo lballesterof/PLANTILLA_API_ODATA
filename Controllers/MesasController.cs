@@ -48,7 +48,7 @@ namespace PLANTILLA_API_ODATA.Controllers
                             dynamicParameters1.Add("@MESA", (object)Mesa);
                             dynamicParameters1.Add("@ESTADO", (object)Estado);
                             dynamicParameters1.Add("@MOZO", (object)Mozo);
-                        var RESPONSE = cnn.ExecuteScalar("RESTA_MOBILE_UPDATE_ESTADOMESA", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
+                        var RESPONSE = cnn.ExecuteScalar("APP_MOBILE_PATCH_TABLESTATE", (object)dynamicParameters1, (IDbTransaction)sqlTransaction, commandType: new CommandType?(CommandType.StoredProcedure));
 
                             sqlTransaction.Commit();
                             return Ok();

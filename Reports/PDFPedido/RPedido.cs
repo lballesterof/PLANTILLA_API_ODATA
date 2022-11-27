@@ -3,6 +3,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
+using PLANTILLA_API_ODATA.Models.DTO.Cotizacion;
 using PLANTILLA_API_ODATA.Models.DTO.ListaPrecio;
 using PLANTILLA_API_ODATA.Models.DTO.Pedido;
 using PLANTILLA_API_ODATA.Models.DTO.Pedido.PDF;
@@ -496,7 +497,7 @@ namespace PLANTILLA_API_ODATA.Reports.PDFPedido
                 _document.Add(TableSubTotal);
 
                 #endregion
-            #region Condiciones Comerciales
+                #region Condiciones Comerciales
 
                 var Nominal = "SON: " + "DOS MIL SOLES CON 00 EXACTOS";
                 _pdfPCell = new PdfPCell(new Phrase(Nominal, letraChicaN));
@@ -569,11 +570,11 @@ namespace PLANTILLA_API_ODATA.Reports.PDFPedido
                 _pdfPCell.HorizontalAlignment = Element.ALIGN_LEFT;
                 TableCondicion.AddCell(_pdfPCell);
 
-                _pdfPCell = new PdfPCell(new Phrase("2" + " " + " DIAS", letraChica));
-                _pdfPCell.Border = 0;
-                _pdfPCell.Colspan = 7;
-                _pdfPCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                TableCondicion.AddCell(_pdfPCell);
+                //_pdfPCell = new PdfPCell(new Phrase(_pedidobody.VALIDEZ + " DÍAS", letraChica));
+                //_pdfPCell.Border = 0;
+                //_pdfPCell.Colspan = 7;
+                //_pdfPCell.HorizontalAlignment = 0;
+                //TableCondicion.AddCell(_pdfPCell);
 
                 _pdfPCell = new PdfPCell(new Phrase("", letraChicaN));
                 _pdfPCell.Border = 0;
