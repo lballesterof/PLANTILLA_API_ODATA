@@ -218,7 +218,7 @@ namespace PLANTILLA_API_ODATA.Services.Usuario
                     DynamicParameters cmd = new DynamicParameters();
                     cmd.Add("@DNI", model.dni);
                     cmd.Add("@CONTRASENA", model.password);
-                    var procedure = "GetLoginClientCuota";
+                    var procedure = "APP_MOBILE_INSTALMENTS_BUSINESSPARTNERS_LOGIN";
 
                     listado = db.Query<OpeUsuarioDTO>(procedure, cmd, commandType: System.Data.CommandType.StoredProcedure);
                     db.Dispose();
